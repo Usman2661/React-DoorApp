@@ -53,7 +53,6 @@ render() {
           </MDBNavbarNav>
         </MDBCollapse>
       </MDBNavbar>
-    
     );
   }
 }

@@ -1,10 +1,61 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn, MDBCard, MDBCardBody } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn, MDBCard, MDBCardBody,  MDBModal,
+  MDBModalBody, MDBModalHeader, 
+  MDBModalFooter } from 'mdbreact';
+import axios from 'axios';
 
 class login extends Component {
 
-  login() {
-    console.log("The login button was clicked!!!");
+  constructor(props) {
+    super(props);
+    this.state = {
+      password:'',
+      message:'',
+      modal: false
+    };
+    this.login = this.login.bind(this);
+    this.handleEmail = this.handleEmail.bind(this);
+    this.handlePassword = this.handlePassword.bind(this);
+  }
+
+  handleEmail(event) {
+    this.setState({email: event.target.value});
+  }
+  handlePassword(event) {
+    this.setState({password: event.target.value});
+  }
+
+  
+  login(event) {
+    event.preventDefault();
+
+    axios.post('http://localhost:3000/api/user/login', { 
+      email: this.state.email,
+      password: this.state.password
+     })
+    .then(res => {
+      console.log(res);
+      console.log(res.data.message);
+      this.setState({message: "Login Success"});
+      this.setState({
+        modal: !this.state.modal
+      });
+    })
+    .catch(error => {
+      console.log(error);
+      console.log(error.message);
+      this.setState({message: "Invalid Credentials"});
+      this.setState({
+        modal: !this.state.modal
+      });
+    })
+  }
+
+
+  toggle = () => {
+    this.setState({
+      modal: !this.state.modal
+    });
   }
 
 
@@ -13,7 +64,7 @@ class login extends Component {
           <MDBContainer>
           <MDBRow>
             <MDBCol md="6">
-              <form>
+              <form onSubmit={this.login}>
                 <p className="h4 text-center mb-4">Sign in</p>
                 <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
                   Your email
@@ -22,6 +73,7 @@ class login extends Component {
                   type="email"
                   id="defaultFormLoginEmailEx"
                   className="form-control"
+                  value={this.state.email} onChange={this.handleEmail}
                 />
                 <br />
                 <label htmlFor="defaultFormLoginPasswordEx" className="grey-text">
@@ -31,13 +83,25 @@ class login extends Component {
                   type="password"
                   id="defaultFormLoginPasswordEx"
                   className="form-control"
+                  value={this.state.password} onChange={this.handlePassword}
                 />
                 <div className="text-center mt-4">
-                  <MDBBtn color="indigo" type="button" onClick = {this.login}>Login</MDBBtn>
+                  <MDBBtn color="indigo" type="submit" >Login</MDBBtn>
                 </div>
               </form>
             </MDBCol>
           </MDBRow>
+
+
+          <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
+        <MDBModalHeader toggle={this.toggle}>Message</MDBModalHeader>
+        <MDBModalBody>
+          {this.state.message}
+        </MDBModalBody>
+        <MDBModalFooter>
+          <MDBBtn color="secondary" onClick={this.toggle}>Close</MDBBtn>
+        </MDBModalFooter>
+      </MDBModal>
         </MDBContainer>
         )
     }
