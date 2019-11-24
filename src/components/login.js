@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn, MDBCard, MDBCardBody,  MDBModal,
   MDBModalBody, MDBModalHeader, 
   MDBModalFooter } from 'mdbreact';
@@ -6,9 +7,18 @@ import axios from 'axios';
 
 class login extends Component {
 
+  constuctor() {
+    this.routeChange = this.routeChange.bind(this);
+  }
+
+  
+ 
+  
+
   constructor(props) {
     super(props);
     this.state = {
+      email:'',
       password:'',
       message:'',
       modal: false
@@ -24,8 +34,6 @@ class login extends Component {
   handlePassword(event) {
     this.setState({password: event.target.value});
   }
-
-  
   login(event) {
     event.preventDefault();
 
@@ -37,9 +45,13 @@ class login extends Component {
       console.log(res);
       console.log(res.data.message);
       this.setState({message: "Login Success"});
+      
       this.setState({
         modal: !this.state.modal
       });
+
+      let path = 'home';
+      this.props.history.push(path);
     })
     .catch(error => {
       console.log(error);

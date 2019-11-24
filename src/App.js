@@ -5,9 +5,7 @@ import Login from './components/login'
 import { BrowserRouter as Router , Route , Switch , Link} from 'react-router-dom';
 import Register from './components/register';
 import Error from './components/Error';
-
-
-
+import Home from './components/home';
 
 
 class App extends Component {
@@ -22,6 +20,8 @@ class App extends Component {
             <Switch>
              <Route path="/" component={Login} exact/>
              <Route path="/register" component={Register}/>
+             <Route path="/home" component={Home}/>
+
              <Route component={Error}/>
             
            </Switch>
