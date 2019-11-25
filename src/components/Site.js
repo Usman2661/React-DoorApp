@@ -17,8 +17,12 @@ export class Site extends Component {
 
     componentDidMount() {
         const loggedIn =  localStorage.getItem('loggedIn');
+        const usertype =  localStorage.getItem('usertype');
+
         if (loggedIn){
-  
+            if(usertype!=='Manager'){
+                this.props.history.push('/permission');
+            }
         }
         else {
           this.props.history.push('/');

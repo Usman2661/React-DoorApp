@@ -21,8 +21,12 @@ toggleCollapse = () => {
 }
 
 logout = () => {
-  
+
   localStorage.removeItem("loggedIn");  //Logging user out
+  localStorage.removeItem("email");  //Logging user out
+  localStorage.removeItem("usertype");  //Logging user out
+  localStorage.removeItem("name");  //Logging user out
+  localStorage.removeItem("userId");  //Logging user out
 
   this.props.history.push('/');
 
@@ -51,6 +55,9 @@ render() {
             </MDBNavItem>
             <MDBNavItem>
             <MDBNavLink to="/site">Create Site</MDBNavLink>
+            </MDBNavItem>
+            <MDBNavItem>
+            <MDBNavLink to="/door">Create Door</MDBNavLink>
             </MDBNavItem>
 
 

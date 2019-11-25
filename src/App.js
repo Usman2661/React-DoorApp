@@ -7,6 +7,10 @@ import Register from './components/register';
 import Error from './components/Error';
 import Home from './components/home';
 import SiteCreate from './components/Site';
+import Permission from './components/Permission';
+import Door from './components/Door';
+
+
 
 
 
@@ -24,6 +28,10 @@ class App extends Component {
              <Route path="/register" component={Register}/>
              <Route path="/home" component={Home}/>
              <Route path="/site" component={SiteCreate}/>
+             <Route path="/permission" component={Permission}/>
+             <Route path="/door" component={Door}/>
+
+
 
              <Route component={Error}/>
             

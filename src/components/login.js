@@ -51,7 +51,13 @@ class login extends Component {
      })
     .then(res => {
       console.log(res);
-      console.log(res.data.message);
+      console.log(res.data);
+
+      var email = res.data.email;
+      var usertype = res.data.usertype;
+      var name = res.data.name;
+      var userId = res.data.userId;
+
       this.setState({message: "Login Success"});
       
       this.setState({
@@ -59,6 +65,10 @@ class login extends Component {
       });
 
       localStorage.setItem('loggedIn', true);
+      localStorage.setItem('email', email);
+      localStorage.setItem('usertype', usertype);
+      localStorage.setItem('name', name);
+      localStorage.setItem('userId', userId);
 
       let path = 'home';
       this.props.history.push(path);
