@@ -11,9 +11,16 @@ class login extends Component {
     this.routeChange = this.routeChange.bind(this);
   }
 
-  
- 
-  
+  componentDidMount() {
+
+    const loggedIn =  localStorage.getItem('loggedIn');
+    
+    if (loggedIn){
+      let path = '/home';
+      this.props.history.push(path);
+    }
+
+  }
 
   constructor(props) {
     super(props);
@@ -21,7 +28,8 @@ class login extends Component {
       email:'',
       password:'',
       message:'',
-      modal: false
+      modal: false, 
+      loggedIn: false
     };
     this.login = this.login.bind(this);
     this.handleEmail = this.handleEmail.bind(this);
@@ -49,6 +57,8 @@ class login extends Component {
       this.setState({
         modal: !this.state.modal
       });
+
+      localStorage.setItem('loggedIn', true);
 
       let path = 'home';
       this.props.history.push(path);

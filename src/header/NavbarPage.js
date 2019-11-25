@@ -1,10 +1,16 @@
 import React, { Component } from "react";
 import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem, MDBNavLink, MDBNavbarToggler, MDBCollapse, MDBDropdown,
 MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem, MDBIcon } from "mdbreact";
-import { BrowserRouter as Router , Link , NavLink } from 'react-router-dom';
-
+import { BrowserRouter as Router , Route, Link , NavLink, Hash} from 'react-router-dom';
+import { withRouter} from 'react-router-dom';
 
 class NavbarPage extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+    };
+  }
     
 state = {
   isOpen: false
@@ -14,9 +20,18 @@ toggleCollapse = () => {
   this.setState({ isOpen: !this.state.isOpen });
 }
 
+logout = () => {
+  
+  localStorage.removeItem("loggedIn");  //Logging user out
+
+  this.props.history.push('/');
+
+
+}
+
 render() {
   return (
-      <MDBNavbar color="purple" dark expand="md">
+      <MDBNavbar color="green" dark expand="md">
         <MDBNavbarBrand>
           <strong className="white-text">Door Monitoring</strong>
         </MDBNavbarBrand>
@@ -26,26 +41,31 @@ render() {
             <MDBNavItem active>
               <MDBNavLink to="/home">Home</MDBNavLink>
             </MDBNavItem>
+
+      
             <MDBNavItem>
               <MDBNavLink to="/">Login</MDBNavLink>
             </MDBNavItem>
             <MDBNavItem>
             <MDBNavLink to="/register">Register</MDBNavLink>
             </MDBNavItem>
-  
+            <MDBNavItem>
+            <MDBNavLink to="/site">Create Site</MDBNavLink>
+            </MDBNavItem>
+
+
           </MDBNavbarNav>
           <MDBNavbarNav right>
-        
+
+
             <MDBNavItem>
               <MDBDropdown>
                 <MDBDropdownToggle nav caret>
                   <MDBIcon icon="user" />
                 </MDBDropdownToggle>
                 <MDBDropdownMenu className="dropdown-default">
-                  <MDBDropdownItem href="#!">Action</MDBDropdownItem>
-                  <MDBDropdownItem href="#!">Another Action</MDBDropdownItem>
-                  <MDBDropdownItem href="#!">Something else here</MDBDropdownItem>
-                  <MDBDropdownItem href="#!">Something else here</MDBDropdownItem>
+                  <MDBDropdownItem href="#!">Hi </MDBDropdownItem>
+                  <MDBDropdownItem  onClick= {this.logout}>Logout</MDBDropdownItem>
                 </MDBDropdownMenu>
               </MDBDropdown>
             </MDBNavItem>
@@ -56,4 +76,4 @@ render() {
   }
 }
 
-export default NavbarPage;
+export default withRouter(NavbarPage);

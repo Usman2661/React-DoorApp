@@ -7,9 +7,18 @@ import { MDBContainer,
 import axios from 'axios';
 import { BrowserRouter as Router , Link , NavLink } from 'react-router-dom';
 
-
 export class register extends Component {
 
+  componentDidMount() {
+
+    const loggedIn =  localStorage.getItem('loggedIn');
+
+    if (loggedIn){
+      let path = '/home';
+      this.props.history.push(path);
+    }
+  }
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -18,7 +27,8 @@ export class register extends Component {
       password:'',
       usertype:'', 
       message:'',
-      modal: false
+      modal: false,
+      loggedIn: false,
     };
     this.register = this.register.bind(this);
     this.handleEmail = this.handleEmail.bind(this);

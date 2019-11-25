@@ -6,6 +6,8 @@ import { BrowserRouter as Router , Route , Switch , Link} from 'react-router-dom
 import Register from './components/register';
 import Error from './components/Error';
 import Home from './components/home';
+import SiteCreate from './components/Site';
+
 
 
 class App extends Component {
@@ -21,6 +23,7 @@ class App extends Component {
              <Route path="/" component={Login} exact/>
              <Route path="/register" component={Register}/>
              <Route path="/home" component={Home}/>
+             <Route path="/site" component={SiteCreate}/>
 
              <Route component={Error}/>
             
