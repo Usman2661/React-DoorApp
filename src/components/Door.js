@@ -3,10 +3,32 @@ import { MDBContainer, MDBRow, MDBCol, MDBBtn,MDBModal,
     MDBModalBody, MDBModalHeader, 
     MDBModalFooter } from 'mdbreact';
 
+import axios from 'axios';
+
 
 export class Door extends Component {
 
+    state = {
+       sites: [], 
+       DoorName: '',
+       DoorLocation: '',
+       SiteID: '',
+       modal: false,
+       message:'',
+       datetime:''
+      };
+
+
+      constructor(props) {
+        super(props);
+        this.handleChange = this.handleChange.bind(this);
+        this.createDoor = this.createDoor.bind(this);
+      } 
+
+
     componentDidMount() {
+
+      //Checking user logged in status
         const loggedIn =  localStorage.getItem('loggedIn');
         const usertype =  localStorage.getItem('usertype');
 
@@ -14,10 +36,65 @@ export class Door extends Component {
             if(usertype!=='Manager'){
                 this.props.history.push('/permission');
             }
-        }
+            else{
+              axios.get(`http://localhost:3000/api/sites`)
+              .then(res => {
+                const sites = res.data.sites;
+                this.setState({ sites });
+              })
+              .catch (error => {
+                console.log(error);
+              })
+              var currentDateTime = new Date();
+              var date = currentDateTime.getFullYear() + '-' + (currentDateTime.getMonth()+1) + '-' + currentDateTime.getDate() +' '+ currentDateTime.getHours()+':'+ currentDateTime.getMinutes()+':'+ currentDateTime.getSeconds();
+
+              this.setState({datetime: date});
+              }
+         }
         else {
           this.props.history.push('/');
         }
+      }
+
+      //Handle the on change for the values of form
+      handleChange(event) {
+        this.setState({[event.target.name]: event.target.value});
+      }
+
+      //Submit the form
+      createDoor(event) {
+        event.preventDefault();
+
+        console.log(this.state.datetime);
+    
+        axios.post('http://localhost:3000/api/door', { 
+          SiteID: this.state.SiteID, 
+          DoorName: this.state.DoorName,
+          DoorLocation: this.state.DoorLocation, 
+          DateTimeCreated: this.state.datetime
+        })
+       .then(res => {
+          console.log(res);
+          console.log(res.data.message);
+          this.setState({message: "Door Created!!"});
+          this.setState({
+          modal: !this.state.modal
+       });
+      })
+      .catch(error => {
+          console.log(error);
+          this.setState({message: "There has been an error"});
+          this.setState({
+          modal: !this.state.modal
+      });
+      })
+      }
+
+
+      toggle = () => {
+        this.setState({
+          modal: !this.state.modal
+        });
       }
 
 
@@ -34,7 +111,8 @@ export class Door extends Component {
                     type="text"
                     id="defaultFormRegisterNameEx"
                     className="form-control"
-                    // value={this.state.SiteName} onChange={this.handleSiteName}
+                    name="DoorName"
+                    value={this.state.DoorName} onChange={this.handleChange}
 
                   />
                   <br />
@@ -45,14 +123,18 @@ export class Door extends Component {
                     type="text"
                     id="defaultFormRegisterEmailEx"
                     className="form-control"
-                    // value={this.state.SiteAddressLine1} onChange={this.handleSiteAddressLine1}
+                    name="DoorLocation"
+                    value={this.state.DoorLocation} onChange={this.handleChange}
                   />
                   <br />
-                  <select className="browser-default custom-select">
+                  <select className="browser-default custom-select" name="SiteID" onChange={this.handleChange}>
                     <option>Choose your Site</option>
-                    <option value="1">Option 1</option>
-                    <option value="2">Option 2</option>
-                    <option value="3">Option 3</option>
+                    { this.state.sites.map( site =>
+
+                    <option value={site._id}>{site.SiteName}</option>
+
+
+                    )}
                     </select>
                   <div className="text-center mt-4">
                     <MDBBtn color="unique" type="submit">
@@ -64,7 +146,7 @@ export class Door extends Component {
             </MDBRow>
 
 
-            {/* <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
+            <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
         <MDBModalHeader toggle={this.toggle}>Message</MDBModalHeader>
         <MDBModalBody>
           {this.state.message}
@@ -72,8 +154,7 @@ export class Door extends Component {
         <MDBModalFooter>
           <MDBBtn color="secondary" onClick={this.toggle}>Close</MDBBtn>
         </MDBModalFooter>
-      </MDBModal> */}
-
+      </MDBModal>
 
           </MDBContainer>
         )

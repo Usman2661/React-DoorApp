@@ -32,16 +32,13 @@ class login extends Component {
       loggedIn: false
     };
     this.login = this.login.bind(this);
-    this.handleEmail = this.handleEmail.bind(this);
-    this.handlePassword = this.handlePassword.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  handleEmail(event) {
-    this.setState({email: event.target.value});
+  handleChange(event) {
+    this.setState({[event.target.name]: event.target.value});
   }
-  handlePassword(event) {
-    this.setState({password: event.target.value});
-  }
+ 
   login(event) {
     event.preventDefault();
 
@@ -105,7 +102,8 @@ class login extends Component {
                   type="email"
                   id="defaultFormLoginEmailEx"
                   className="form-control"
-                  value={this.state.email} onChange={this.handleEmail}
+                  name="email"
+                  value={this.state.email} onChange={this.handleChange}
                 />
                 <br />
                 <label htmlFor="defaultFormLoginPasswordEx" className="grey-text">
@@ -115,7 +113,8 @@ class login extends Component {
                   type="password"
                   id="defaultFormLoginPasswordEx"
                   className="form-control"
-                  value={this.state.password} onChange={this.handlePassword}
+                  name="password"
+                  value={this.state.password} onChange={this.handleChange}
                 />
                 <div className="text-center mt-4">
                   <MDBBtn color="indigo" type="submit" >Login</MDBBtn>

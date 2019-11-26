@@ -31,23 +31,12 @@ export class register extends Component {
       loggedIn: false,
     };
     this.register = this.register.bind(this);
-    this.handleEmail = this.handleEmail.bind(this);
-    this.handleName = this.handleName.bind(this);
-    this.handlePassword = this.handlePassword.bind(this);
-    this.handleUserType = this.handleUserType.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
-  handleName(event) {
-    this.setState({name: event.target.value});
+  handleChange(event) {
+    this.setState({[event.target.name]: event.target.value});
   }
-  handleEmail(event) {
-    this.setState({email: event.target.value});
-  }
-  handlePassword(event) {
-    this.setState({password: event.target.value});
-  }
-  handleUserType(event) {
-    this.setState({usertype: event.target.value});
-  }
+
 
   register(event) {
     event.preventDefault();
@@ -98,7 +87,8 @@ export class register extends Component {
                   type="text"
                   id="name"
                   className="form-control"
-                  value={this.state.name} onChange={this.handleName}
+                  name="name"
+                  value={this.state.name} onChange={this.handleChange}
                 />
                 <br />
                 <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
@@ -108,7 +98,8 @@ export class register extends Component {
                   type="email"
                   id="email"
                   className="form-control"
-                  value={this.state.email} onChange={this.handleEmail}
+                  name="email"
+                  value={this.state.email} onChange={this.handleChange}
                 />
                 <br />
                 <label htmlFor="defaultFormLoginPasswordEx" className="grey-text">
@@ -118,7 +109,8 @@ export class register extends Component {
                   type="password"
                   id="password"
                   className="form-control"
-                  value={this.state.password} onChange={this.handlePassword}
+                  name="password"
+                  value={this.state.password} onChange={this.handleChange}
                 />
 
               <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
@@ -128,7 +120,8 @@ export class register extends Component {
                   type="text"
                   id="usertype"
                   className="form-control"
-                  value={this.state.usertype} onChange={this.handleUserType}
+                  name="usertype"
+                  value={this.state.usertype} onChange={this.handleChange}
                 />
                 <br />
                 <div className="text-center mt-4">

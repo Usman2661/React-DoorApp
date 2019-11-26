@@ -23,6 +23,8 @@ export class Site extends Component {
             if(usertype!=='Manager'){
                 this.props.history.push('/permission');
             }
+          
+
         }
         else {
           this.props.history.push('/');
@@ -40,31 +42,15 @@ export class Site extends Component {
           modal: false
         };
 
-        this.handleCity = this.handleCity.bind(this);
-        this.handlePostCode = this.handlePostCode.bind(this);
-        this.handleSiteAddressLine1 = this.handleSiteAddressLine1.bind(this);
-        this.handleSiteAddressLine2 = this.handleSiteAddressLine2.bind(this);
-        this.handleSiteName = this.handleSiteName.bind(this);
+        this.handleChange = this.handleChange.bind(this);
         this.createSite = this.createSite.bind(this);
 
       }
 
-
-      handleSiteName(event) {
-        this.setState({SiteName: event.target.value});
+      handleChange(event) {
+        this.setState({[event.target.name]: event.target.value});
       }
-      handleSiteAddressLine1(event) {
-        this.setState({SiteAddressLine1: event.target.value});
-      }
-      handleSiteAddressLine2(event) {
-        this.setState({SiteAddressLine2: event.target.value});
-      }
-      handlePostCode(event) {
-        this.setState({PostCode: event.target.value});
-      }
-      handleCity(event) {
-        this.setState({City: event.target.value});
-      }
+ 
 
       toggle = () => {
         this.setState({
@@ -111,7 +97,8 @@ export class Site extends Component {
                     type="text"
                     id="defaultFormRegisterNameEx"
                     className="form-control"
-                    value={this.state.SiteName} onChange={this.handleSiteName}
+                    name="SiteName"
+                    value={this.state.SiteName} onChange={this.handleChange}
 
                   />
                   <br />
@@ -122,7 +109,8 @@ export class Site extends Component {
                     type="text"
                     id="defaultFormRegisterEmailEx"
                     className="form-control"
-                    value={this.state.SiteAddressLine1} onChange={this.handleSiteAddressLine1}
+                    name="SiteAddressLine1"
+                    value={this.state.SiteAddressLine1} onChange={this.handleChange}
 
                   />
                   <br />
@@ -136,7 +124,8 @@ export class Site extends Component {
                     type="text"
                     id="defaultFormRegisterConfirmEx"
                     className="form-control"
-                    value={this.state.SiteAddressLine2} onChange={this.handleSiteAddressLine2}
+                    name="SiteAddressLine2"
+                    value={this.state.SiteAddressLine2} onChange={this.handleChange}
                   />
                   <br />
                   <label  htmlFor="defaultFormRegisterConfirmEx" className="grey-text"> Post Code</label>
@@ -144,7 +133,8 @@ export class Site extends Component {
                     type="text"
                     id="defaultFormRegisterConfirmEx"
                     className="form-control"
-                    value={this.state.PostCode} onChange={this.handlePostCode}
+                    name="PostCode"
+                    value={this.state.PostCode} onChange={this.handleChange}
 
                   />
                  <br />
@@ -153,8 +143,9 @@ export class Site extends Component {
                     type="text"
                     id="defaultFormRegisterConfirmEx"
                     className="form-control"
-                    value={this.state.City} onChange={this.handleCity}
-
+                    name="City"
+                    value={this.state.City} onChange={this.handleChange}
+                    
                   />
                  <br />
 
