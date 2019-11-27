@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem, MDBNavLink, MDBNavbarToggler, MDBCollapse, MDBDropdown,
-MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem, MDBIcon } from "mdbreact";
-import { BrowserRouter as Router , Route, Link , NavLink, Hash} from 'react-router-dom';
+  MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem, MDBIcon } from "mdbreact";
 import { withRouter} from 'react-router-dom';
 
 class NavbarPage extends Component {
@@ -20,6 +19,16 @@ toggleCollapse = () => {
   this.setState({ isOpen: !this.state.isOpen });
 }
 
+
+state = {
+  collapseID: ""
+};
+
+toggleCollapse = collapseID => () =>
+  this.setState(prevState => ({
+  collapseID: prevState.collapseID !== collapseID ? collapseID : ""
+}));
+
 logout = () => {
 
   localStorage.removeItem("loggedIn");  //Logging user out
@@ -27,52 +36,57 @@ logout = () => {
   localStorage.removeItem("usertype");  //Logging user out
   localStorage.removeItem("name");  //Logging user out
   localStorage.removeItem("userId");  //Logging user out
+  localStorage.removeItem("token");  //Logging user out
 
   this.props.history.push('/');
 
 
 }
 
+myaccount = () => {
+  this.props.history.push('/account');
+}
+
 render() {
+  let loggedIn = localStorage.getItem("loggedIn");
+
   return (
-      <MDBNavbar color="green" dark expand="md">
+      <MDBNavbar color="secondary-color" dark expand="md">
         <MDBNavbarBrand>
-          <strong className="white-text">Door Monitoring</strong>
+          <strong className="white-text">Door Dashboard</strong>
         </MDBNavbarBrand>
-        <MDBNavbarToggler onClick={this.toggleCollapse} />
-        <MDBCollapse id="navbarCollapse3" isOpen={this.state.isOpen} navbar>
+        <MDBNavbarToggler onClick={this.toggleCollapse("navbarCollapse3")} />
+        <MDBCollapse id="navbarCollapse3" isOpen={this.state.collapseID} navbar>
           <MDBNavbarNav left>
-            <MDBNavItem active>
+
+            <MDBNavItem>
               <MDBNavLink to="/home">Home</MDBNavLink>
             </MDBNavItem>
-
-      
             <MDBNavItem>
+              <MDBNavLink to="/site">Create Site</MDBNavLink>
+            </MDBNavItem>
+            <MDBNavItem>
+              <MDBNavLink to="/door">Create Door</MDBNavLink>
+            </MDBNavItem>
+      
+              <MDBNavItem>    
               <MDBNavLink to="/">Login</MDBNavLink>
             </MDBNavItem>
             <MDBNavItem>
-            <MDBNavLink to="/register">Register</MDBNavLink>
+              <MDBNavLink to="/register">Register</MDBNavLink>
             </MDBNavItem>
-            <MDBNavItem>
-            <MDBNavLink to="/site">Create Site</MDBNavLink>
-            </MDBNavItem>
-            <MDBNavItem>
-            <MDBNavLink to="/door">Create Door</MDBNavLink>
-            </MDBNavItem>
-
-
           </MDBNavbarNav>
           <MDBNavbarNav right>
-
-
             <MDBNavItem>
               <MDBDropdown>
-                <MDBDropdownToggle nav caret>
-                  <MDBIcon icon="user" />
+                <MDBDropdownToggle className="dopdown-toggle" nav> 
+             <label>Hi Usman  </label>
+                  <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-2.jpg" className="rounded-circle z-depth-0"
+                    style={{ height: "35px", padding: 0 }} alt="" />
                 </MDBDropdownToggle>
-                <MDBDropdownMenu className="dropdown-default">
-                  <MDBDropdownItem href="#!">Hi </MDBDropdownItem>
-                  <MDBDropdownItem  onClick= {this.logout}>Logout</MDBDropdownItem>
+                <MDBDropdownMenu className="dropdown-default" right>
+                  <MDBDropdownItem onClick={this.myaccount}> My account</MDBDropdownItem>
+                  <MDBDropdownItem onClick={this.logout}>Log out</MDBDropdownItem>
                 </MDBDropdownMenu>
               </MDBDropdown>
             </MDBNavItem>

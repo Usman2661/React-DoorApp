@@ -37,7 +37,17 @@ export class Door extends Component {
                 this.props.history.push('/permission');
             }
             else{
-              axios.get(`http://localhost:3000/api/sites`)
+                
+            const token =  localStorage.getItem('token');
+
+            axios({
+              url: 'http://localhost:3000/api/sites',
+              method: 'get',
+              headers: {
+                  'Authorization': 'Bearer '+token,
+                  'Content-Type': 'application/json'
+              }
+            })
               .then(res => {
                 const sites = res.data.sites;
                 this.setState({ sites });
@@ -64,14 +74,20 @@ export class Door extends Component {
       //Submit the form
       createDoor(event) {
         event.preventDefault();
+        const token =  localStorage.getItem('token');
 
-        console.log(this.state.datetime);
+        const headers = {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer '+token
+        }
     
         axios.post('http://localhost:3000/api/door', { 
           SiteID: this.state.SiteID, 
           DoorName: this.state.DoorName,
           DoorLocation: this.state.DoorLocation, 
           DateTimeCreated: this.state.datetime
+        }, {
+          headers:headers
         })
        .then(res => {
           console.log(res);

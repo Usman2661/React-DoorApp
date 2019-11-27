@@ -60,12 +60,22 @@ export class Site extends Component {
 
       createSite(event){
           event.preventDefault();
+
+          const token =  localStorage.getItem('token');
+
+          const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer '+token
+          }
+
           axios.post('http://localhost:3000/api/site', { 
             SiteName: this.state.SiteName, 
             SiteAddressLine1: this.state.SiteAddressLine1,
             SiteAddressLine2: this.state.SiteAddressLine2, 
             PostCode: this.state.PostCode,
             City: this.state.City
+          },{
+            headers:headers
           })
          .then(res => {
             console.log(res);

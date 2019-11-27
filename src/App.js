@@ -9,6 +9,8 @@ import Home from './components/home';
 import SiteCreate from './components/Site';
 import Permission from './components/Permission';
 import Door from './components/Door';
+import UserAccount from './components/useraccount';
+
 
 
 
@@ -30,6 +32,8 @@ class App extends Component {
              <Route path="/site" component={SiteCreate}/>
              <Route path="/permission" component={Permission}/>
              <Route path="/door" component={Door}/>
+             <Route path="/account" component={UserAccount}/>
+
 
 
 

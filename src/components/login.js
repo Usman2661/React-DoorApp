@@ -54,6 +54,7 @@ class login extends Component {
       var usertype = res.data.usertype;
       var name = res.data.name;
       var userId = res.data.userId;
+      var token = res.data.token;
 
       this.setState({message: "Login Success"});
       
@@ -66,6 +67,7 @@ class login extends Component {
       localStorage.setItem('usertype', usertype);
       localStorage.setItem('name', name);
       localStorage.setItem('userId', userId);
+      localStorage.setItem('token', token);
 
       let path = 'home';
       this.props.history.push(path);
