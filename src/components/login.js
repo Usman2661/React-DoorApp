@@ -57,11 +57,10 @@ class login extends Component {
       var token = res.data.token;
 
       this.setState({message: "Login Success"});
-      
+    
       this.setState({
         modal: !this.state.modal
       });
-
       localStorage.setItem('loggedIn', true);
       localStorage.setItem('email', email);
       localStorage.setItem('usertype', usertype);
