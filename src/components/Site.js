@@ -12,7 +12,9 @@ export class Site extends Component {
             SiteAddressLine2:'',
             PostCode:'', 
             City:'',
-            modal: false
+            image: null,
+            modal: false,
+            message:''
           };
 
     componentDidMount() {
@@ -39,17 +41,26 @@ export class Site extends Component {
           SiteAddressLine2:'',
           PostCode:'', 
           City:'',
-          modal: false
+          image:null,
+          modal: false,
+          message:''
         };
 
         this.handleChange = this.handleChange.bind(this);
+        this.handleImageChange = this.handleImageChange.bind(this);
         this.createSite = this.createSite.bind(this);
 
       }
+      
 
       handleChange(event) {
         this.setState({[event.target.name]: event.target.value});
       }
+      handleImageChange = (e) => {
+        this.setState({
+          image: e.target.files[0]
+        })
+      };
  
 
       toggle = () => {
@@ -63,19 +74,21 @@ export class Site extends Component {
 
           const token =  localStorage.getItem('token');
 
-          const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer '+token
-          }
+          let form_data = new FormData();
+          form_data.append('file', this.state.image, this.state.image.name);
+          form_data.append('SiteName', this.state.SiteName);
+          form_data.append('SiteAddressLine1', this.state.SiteAddressLine1);
+          form_data.append('SiteAddressLine2', this.state.SiteAddressLine2);
+          form_data.append('PostCode', this.state.PostCode);
+          form_data.append('City', this.state.City);
 
-          axios.post('http://localhost:3000/api/site', { 
-            SiteName: this.state.SiteName, 
-            SiteAddressLine1: this.state.SiteAddressLine1,
-            SiteAddressLine2: this.state.SiteAddressLine2, 
-            PostCode: this.state.PostCode,
-            City: this.state.City
-          },{
-            headers:headers
+          let url = 'http://localhost:3000/api/site';
+  
+          axios.post(url, form_data, {
+            headers: {
+              'content-type': 'multipart/form-data',
+              'Authorization': 'Bearer '+token
+            }
           })
          .then(res => {
             console.log(res);
@@ -158,6 +171,14 @@ export class Site extends Component {
                     
                   required/>
                  <br />
+                 <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
+                  Building image 
+                </label>
+                <p>
+            <input type="file"
+                   id="image"
+                   accept="image/png, image/jpeg"  onChange={this.handleImageChange} required/>
+             </p>
 
                   <div className="text-center mt-4">
                     <MDBBtn color="unique" type="submit">
