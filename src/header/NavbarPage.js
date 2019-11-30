@@ -19,7 +19,6 @@ toggleCollapse = () => {
   this.setState({ isOpen: !this.state.isOpen });
 }
 
-
 state = {
   collapseID: ""
 };
@@ -37,10 +36,7 @@ logout = () => {
   localStorage.removeItem("name");  //Logging user out
   localStorage.removeItem("userId");  //Logging user out
   localStorage.removeItem("token");  //Logging user out
-
   this.props.history.push('/');
-
-
 }
 
 myaccount = () => {
@@ -48,7 +44,9 @@ myaccount = () => {
 }
 
 render() {
-  let loggedIn = localStorage.getItem("loggedIn");
+
+  const name =  localStorage.getItem('name');
+
 
   return (
       <MDBNavbar color="secondary-color" dark expand="md">
@@ -80,7 +78,7 @@ render() {
             <MDBNavItem>
               <MDBDropdown>
                 <MDBDropdownToggle className="dopdown-toggle" nav> 
-             <label>Hi Usman  </label>
+             <label>Hi { name }  </label>
                   <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-2.jpg" className="rounded-circle z-depth-0"
                     style={{ height: "35px", padding: 0 }} alt="" />
                 </MDBDropdownToggle>

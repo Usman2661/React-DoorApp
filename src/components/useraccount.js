@@ -11,7 +11,23 @@ export class useraccount extends Component {
   state = {
     name:'',
     email:'',
-    usertype:''
+    usertype:'',
+    image:null
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      name:'',
+      email:'',
+      usertype:'',
+      image:null
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleImageChange = this.handleImageChange.bind(this);
+    this.updateUser = this.updateUser.bind(this);
+
   }
   
   componentDidMount() {
@@ -54,6 +70,45 @@ export class useraccount extends Component {
       }
     }
 
+    handleChange(event) {
+      this.setState({[event.target.name]: event.target.value});
+    }
+
+    handleImageChange = (e) => {
+      this.setState({
+        image: e.target.files[0]
+      })
+    };
+
+    updateUser(event) {
+      event.preventDefault();
+
+      const token = localStorage.getItem('token');
+      const id =  localStorage.getItem('userId');
+
+
+      console.log(this.state);
+      let form_data = new FormData();
+      form_data.append('file', this.state.image, this.state.image.name);
+      form_data.append('name', this.state.name);
+      form_data.append('email', this.state.email);
+      form_data.append('id', id);
+
+      let url = 'http://localhost:3000/api/user/update';
+      axios.put(url, form_data, {
+        headers: {
+          'content-type': 'multipart/form-data',
+          'Authorization': 'Bearer '+token
+        }
+      })
+          .then(res => {
+            console.log(res.data);
+          })
+          .catch(err => console.log(err))
+
+    }
+
+
 
 
     render() {
@@ -74,8 +129,8 @@ export class useraccount extends Component {
                   id="name"
                   className="form-control"
                   name="name"
-                  value={this.state.name}
-                 />
+                  value={this.state.name} onChange={this.handleChange}
+                 required/>
                 <br />
                 <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
                   Your email
@@ -85,8 +140,8 @@ export class useraccount extends Component {
                   id="email"
                   className="form-control"
                   name="email"
-                   value={this.state.email}
-                 />
+                   value={this.state.email} onChange={this.handleChange}
+                 required/>
                 <br />
             
 
@@ -98,9 +153,19 @@ export class useraccount extends Component {
                   id="usertype"
                   className="form-control"
                   name="usertype"
-                   value={this.state.usertype}
-                 />
+                   value={this.state.usertype} onChange={this.handleChange}
+                 required/>
                 <br/>
+                
+              <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
+                  Avatar Image 
+                </label>
+                <p>
+            <input type="file"
+                   id="image"
+                   accept="image/png, image/jpeg"  onChange={this.handleImageChange} />
+             </p>
+
                 <div className="text-center mt-4">
                   <MDBBtn color="indigo" type="submit" >Save Changes</MDBBtn>
                 </div>
