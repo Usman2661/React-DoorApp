@@ -1,19 +1,66 @@
 import React, { Component } from "react";
 import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem, MDBNavLink, MDBNavbarToggler, MDBCollapse, MDBDropdown,
-  MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem, MDBIcon } from "mdbreact";
+  MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem } from "mdbreact";
 import { withRouter} from 'react-router-dom';
+
+import axios from 'axios';
 
 class NavbarPage extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      isOpen: false,
+      image:''
     };
   }
     
 state = {
-  isOpen: false
+  isOpen: false,
+  image:''
 };
+
+
+
+componentDidMount() {
+
+  //Checking user logged in status
+  const loggedIn =  localStorage.getItem('loggedIn');
+
+    if (loggedIn) {
+
+        const token =  localStorage.getItem('token');
+        const id =  localStorage.getItem('userId');
+
+        axios({
+          url: 'http://localhost:3000/api/user/user?id='+id,
+          method: 'get',
+          headers: {
+              'Authorization': 'Bearer '+token,
+              'Content-Type': 'application/json'
+          }
+        })
+        .then(res => {
+            const users = res.data.users;
+
+            this.setState({image: users.image});
+      
+
+      
+            // this.setState({ sites });
+        })
+        .catch (error => {
+           console.log(error);  
+        })
+
+          
+     }
+    else {
+      this.props.history.push('/');
+    }
+  }
+
+
 
 toggleCollapse = () => {
   this.setState({ isOpen: !this.state.isOpen });
@@ -46,6 +93,7 @@ myaccount = () => {
 render() {
 
   const name =  localStorage.getItem('name');
+  const imageURL = this.state.image;
 
 
   return (
@@ -79,7 +127,7 @@ render() {
               <MDBDropdown>
                 <MDBDropdownToggle className="dopdown-toggle" nav> 
              <label>Hi { name }  </label>
-                  <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-2.jpg" className="rounded-circle z-depth-0"
+                  <img src={ imageURL } className="rounded-circle z-depth-0"
                     style={{ height: "35px", padding: 0 }} alt="" />
                 </MDBDropdownToggle>
                 <MDBDropdownMenu className="dropdown-default" right>

@@ -110,7 +110,7 @@ export class Site extends Component {
                     name="SiteName"
                     value={this.state.SiteName} onChange={this.handleChange}
 
-                  />
+                  required/>
                   <br />
                   <label htmlFor="defaultFormRegisterEmailEx" className="grey-text">
                     Site Address Line 1
@@ -122,7 +122,7 @@ export class Site extends Component {
                     name="SiteAddressLine1"
                     value={this.state.SiteAddressLine1} onChange={this.handleChange}
 
-                  />
+                  required/>
                   <br />
                   <label
                     htmlFor="defaultFormRegisterConfirmEx"
@@ -146,7 +146,7 @@ export class Site extends Component {
                     name="PostCode"
                     value={this.state.PostCode} onChange={this.handleChange}
 
-                  />
+                  required/>
                  <br />
                  <label  htmlFor="defaultFormRegisterConfirmEx" className="grey-text">City</label>
                   <input
@@ -156,7 +156,7 @@ export class Site extends Component {
                     name="City"
                     value={this.state.City} onChange={this.handleChange}
                     
-                  />
+                  required/>
                  <br />
 
                   <div className="text-center mt-4">

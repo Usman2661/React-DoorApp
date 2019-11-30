@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { MDBContainer,
     MDBRow,
     MDBCol, MDBBtn  }  from 'mdbreact';
-
 import axios from 'axios';
 
 export class useraccount extends Component {
@@ -163,7 +162,7 @@ export class useraccount extends Component {
                 <p>
             <input type="file"
                    id="image"
-                   accept="image/png, image/jpeg"  onChange={this.handleImageChange} />
+                   accept="image/png, image/jpeg"  onChange={this.handleImageChange} required/>
              </p>
 
                 <div className="text-center mt-4">
