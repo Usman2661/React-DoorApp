@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { MDBContainer,
-   MDBRow,
-   MDBCol, MDBBtn , MDBModal,
-   MDBModalBody, MDBModalHeader, 
-   MDBModalFooter }  from 'mdbreact';
+import { Button, Form ,Modal ,Select} from 'semantic-ui-react';
 import axios from 'axios';
-import { BrowserRouter as Router , Link , NavLink } from 'react-router-dom';
+
+const userTypeOptions = [
+  {  value: 'Engineer', text: 'Engineer' },
+  {  value: 'Manager', text: 'Manager' },
+]
 
 export class register extends Component {
 
@@ -18,24 +18,30 @@ export class register extends Component {
       this.props.history.push(path);
     }
   }
-  
   constructor(props) {
     super(props);
     this.state = {
       name: '',
       email:'',
       password:'',
-      usertype:'', 
+      usertype:null, 
       message:'',
-      modal: false,
-      loggedIn: false,
+      open: false,
+      loggedIn: false
     };
     this.register = this.register.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
   handleChange(event) {
+    console.log(event.target.name);
     this.setState({[event.target.name]: event.target.value});
   }
+
+  getUserType = (event, {value}) => {
+    console.log(value);
+    let usertype = event.target.textContent;
+    this.setState({ usertype: usertype});
+}
 
 
   register(event) {
@@ -52,7 +58,7 @@ export class register extends Component {
       console.log(res.data.message);
       this.setState({message: "User created successfully"});
       this.setState({
-        modal: !this.state.modal
+        open: !this.state.open
       });
     })
     .catch(error => {
@@ -60,7 +66,7 @@ export class register extends Component {
       console.log(error.message);
       this.setState({message: "There has been an error email may already be in use!!"});
       this.setState({
-        modal: !this.state.modal
+        open: !this.state.open
       });
     })
   }
@@ -68,82 +74,60 @@ export class register extends Component {
 
   toggle = () => {
     this.setState({
-      modal: !this.state.modal
+      open: !this.state.open
     });
   }
 
+  loginPage(){
+    this.props.history.push('/login');
+  }
 
     render() {
         return (
-          <MDBContainer>
-          <MDBRow>
-            <MDBCol md="6">
-              <form onSubmit={this.register}>>
-                <p className="h4 text-center mb-4">Register</p>
-                <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
-                  Your Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  className="form-control"
-                  name="name"
-                  value={this.state.name} onChange={this.handleChange}
-                />
-                <br />
-                <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
-                  Your email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  className="form-control"
-                  name="email"
-                  value={this.state.email} onChange={this.handleChange}
-                />
-                <br />
-                <label htmlFor="defaultFormLoginPasswordEx" className="grey-text">
-                  Your password
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  className="form-control"
-                  name="password"
-                  value={this.state.password} onChange={this.handleChange}
-                />
-
-              <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
-                  User Type
-                </label>
-                <input
-                  type="text"
-                  id="usertype"
-                  className="form-control"
-                  name="usertype"
-                  value={this.state.usertype} onChange={this.handleChange}
-                />
-                <br />
-                <div className="text-center mt-4">
-                  <MDBBtn color="indigo" type="submit" >Register</MDBBtn>
-                </div>
-              </form>
-            </MDBCol>
-          </MDBRow>
 
 
-      <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
-        <MDBModalHeader toggle={this.toggle}>Message</MDBModalHeader>
-        <MDBModalBody>
-          {this.state.message}
-        </MDBModalBody>
-        <MDBModalFooter>
-          <MDBBtn color="secondary" onClick={this.toggle}>Close</MDBBtn>
-        <Link color="primary"  to="/" >Login Now</Link>
-        </MDBModalFooter>
-      </MDBModal>
 
-        </MDBContainer>
+<Form onSubmit={this.register}>
+<Form.Field >
+  <label> Name </label>
+  <input type='text' placeholder='Name'
+       name="name"   value={this.state.name} onChange={this.handleChange}
+   required/>
+</Form.Field>
+<Form.Field >
+  <label> Email </label>
+  <input type='email' placeholder='Email'
+       name="email"   value={this.state.email} onChange={this.handleChange}
+   required/>
+</Form.Field>
+<Form.Field>
+  <label>Password</label>
+  <input type='password' placeholder='Password'  name="password"
+       value={this.state.password} onChange={this.handleChange} required />
+</Form.Field>
+
+<Form.Field>
+
+<Select placeholder='User Type' options={userTypeOptions}  name='usertype' onChange={this.getUserType} required/>
+</Form.Field>
+
+
+<Button type='submit'>Register</Button>
+
+<Modal dimmer='blurring' size='mini' open={this.state.open} onClose={this.toggle}>
+    <Modal.Header>Message</Modal.Header>
+    <Modal.Content>
+  <p>{this.state.message}</p>
+    </Modal.Content>
+    <Modal.Actions>
+      <Button negative onClick={this.toggle}>Close</Button>
+      {/* <Button positive onClick={this.loginPage}>Login Now</Button> */}
+
+ 
+    </Modal.Actions>
+  </Modal>
+
+</Form>
 
         
         )

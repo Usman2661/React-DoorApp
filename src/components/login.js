@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn, MDBCard, MDBCardBody,  MDBModal,
-  MDBModalBody, MDBModalHeader, 
-  MDBModalFooter } from 'mdbreact';
+import { Button, Form ,Modal} from 'semantic-ui-react';
 import axios from 'axios';
 
 class login extends Component {
@@ -28,7 +25,7 @@ class login extends Component {
       email:'',
       password:'',
       message:'',
-      modal: false, 
+      open: false, 
       loggedIn: false
     };
     this.login = this.login.bind(this);
@@ -59,7 +56,7 @@ class login extends Component {
       this.setState({message: "Login Success"});
     
       this.setState({
-        modal: !this.state.modal
+        open: !this.state.open
       });
       localStorage.setItem('loggedIn', true);
       localStorage.setItem('email', email);
@@ -74,9 +71,9 @@ class login extends Component {
     .catch(error => {
       console.log(error);
       console.log(error.message);
-      this.setState({message: "Invalid Credentials"});
+      this.setState({message: "Invalid Credentials: Email or Password may be wrong !!"});
       this.setState({
-        modal: !this.state.modal
+        open: !this.state.open
       });
     })
   }
@@ -84,57 +81,43 @@ class login extends Component {
 
   toggle = () => {
     this.setState({
-      modal: !this.state.modal
+      open: !this.state.open
     });
   }
 
 
     render() {
         return (
-          <MDBContainer>
-          <MDBRow>
-            <MDBCol md="6">
-              <form onSubmit={this.login}>
-                <p className="h4 text-center mb-4">Sign in</p>
-                <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
-                  Your email
-                </label>
-                <input
-                  type="email"
-                  id="defaultFormLoginEmailEx"
-                  className="form-control"
-                  name="email"
-                  value={this.state.email} onChange={this.handleChange}
-                />
-                <br />
-                <label htmlFor="defaultFormLoginPasswordEx" className="grey-text">
-                  Your password
-                </label>
-                <input
-                  type="password"
-                  id="defaultFormLoginPasswordEx"
-                  className="form-control"
-                  name="password"
-                  value={this.state.password} onChange={this.handleChange}
-                />
-                <div className="text-center mt-4">
-                  <MDBBtn color="indigo" type="submit" >Login</MDBBtn>
-                </div>
-              </form>
-            </MDBCol>
-          </MDBRow>
+  
+      <Form onSubmit={this.login}>
+      <Form.Field >
+        <label> Email </label>
+        <input type='email' placeholder='Email'
+             name="email"   value={this.state.email} onChange={this.handleChange}
+         required error/>
+      </Form.Field>
+      <Form.Field>
+        <label>Password</label>
+        <input type='password' placeholder='Password'  name="password"
+             value={this.state.password} onChange={this.handleChange} required error/>
+      </Form.Field>
 
+      <Button type='submit'>Login</Button>
 
-          <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
-        <MDBModalHeader toggle={this.toggle}>Message</MDBModalHeader>
-        <MDBModalBody>
-          {this.state.message}
-        </MDBModalBody>
-        <MDBModalFooter>
-          <MDBBtn color="secondary" onClick={this.toggle}>Close</MDBBtn>
-        </MDBModalFooter>
-      </MDBModal>
-        </MDBContainer>
+      <Modal dimmer='blurring' size='mini' open={this.state.open} onClose={this.toggle}>
+          <Modal.Header>Message</Modal.Header>
+          <Modal.Content>
+        <p>{this.state.message}</p>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button negative onClick={this.toggle}>OK</Button>
+       
+          </Modal.Actions>
+        </Modal>
+
+    </Form>
+
+    
         )
     }
 }

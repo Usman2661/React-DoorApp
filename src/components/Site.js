@@ -25,8 +25,6 @@ export class Site extends Component {
             if(usertype!=='Manager'){
                 this.props.history.push('/permission');
             }
-          
-
         }
         else {
           this.props.history.push('/');

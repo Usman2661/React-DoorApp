@@ -68,6 +68,7 @@ export class Door extends Component {
 
       //Handle the on change for the values of form
       handleChange(event) {
+        
         this.setState({[event.target.name]: event.target.value});
       }
 

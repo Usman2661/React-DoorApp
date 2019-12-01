@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem, MDBNavLink, MDBNavbarToggler, MDBCollapse, MDBDropdown,
-  MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem } from "mdbreact";
+// import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem, MDBNavLink, MDBNavbarToggler, MDBCollapse, MDBDropdown,
+//   MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem } from "mdbreact";
 import { withRouter} from 'react-router-dom';
+import {  Menu , Segment, Dropdown} from 'semantic-ui-react';
 
 import axios from 'axios';
 
@@ -11,13 +12,15 @@ class NavbarPage extends Component {
     super(props);
     this.state = {
       isOpen: false,
-      image:''
+      image:'',
+      name:''
     };
   }
     
 state = {
   isOpen: false,
-  image:''
+  image:'',
+  name:''
 };
 
 
@@ -42,18 +45,13 @@ componentDidMount() {
         })
         .then(res => {
             const users = res.data.users;
-
             this.setState({image: users.image});
-      
-
-      
+            this.setState({name: users.name});
             // this.setState({ sites });
         })
         .catch (error => {
            console.log(error);  
         })
-
-          
      }
     else {
       this.props.history.push('/');
@@ -90,55 +88,77 @@ myaccount = () => {
   this.props.history.push('/account');
 }
 
+handleItemClick = (e, { name }) =>  {
+  if (name==='Register'){
+    this.props.history.push('/register');
+  }
+  else if (name==='Login'){
+    this.props.history.push('/');
+  }
+  else if (name==='Create Door'){
+    this.props.history.push('/door');
+  }
+  else if (name==='Create Site'){
+    this.props.history.push('/site');
+  }
+  else if (name==='Home'){
+    this.props.history.push('/home');
+  }
+
+  this.setState({ activeItem: name })
+}
+
+
+
 render() {
 
-  const name =  localStorage.getItem('name');
-  const imageURL = this.state.image;
+  const name = localStorage.getItem('name');
+  // const imageURL = this.state.image;
+  const { activeItem } = this.state
 
 
   return (
-      <MDBNavbar color="secondary-color" dark expand="md">
-        <MDBNavbarBrand>
-          <strong className="white-text">Door Dashboard</strong>
-        </MDBNavbarBrand>
-        <MDBNavbarToggler onClick={this.toggleCollapse("navbarCollapse3")} />
-        <MDBCollapse id="navbarCollapse3" isOpen={this.state.collapseID} navbar>
-          <MDBNavbarNav left>
+      <Segment inverted>
+      <Menu inverted pointing secondary>
+        <Menu.Item
+          name='Home'
+          active={activeItem === 'Home'}
+          onClick={this.handleItemClick}
+        />
+        <Menu.Item
+          name='Create Site'
+          active={activeItem === 'Create Site'}
+          onClick={this.handleItemClick}
+        />
+        <Menu.Item
+          name='Create Door'
+          active={activeItem === 'Create Door'}
+          onClick={this.handleItemClick}
+        />
+         <Menu.Item
+          name='Login'
+          active={activeItem === 'Login'}
+          onClick={this.handleItemClick}
+        />
+         <Menu.Item
+          name='Register'
+          active={activeItem === 'Register'}
+          onClick={this.handleItemClick}
+        />
 
-            <MDBNavItem>
-              <MDBNavLink to="/home">Home</MDBNavLink>
-            </MDBNavItem>
-            <MDBNavItem>
-              <MDBNavLink to="/site">Create Site</MDBNavLink>
-            </MDBNavItem>
-            <MDBNavItem>
-              <MDBNavLink to="/door">Create Door</MDBNavLink>
-            </MDBNavItem>
-      
-              <MDBNavItem>    
-              <MDBNavLink to="/">Login</MDBNavLink>
-            </MDBNavItem>
-            <MDBNavItem>
-              <MDBNavLink to="/register">Register</MDBNavLink>
-            </MDBNavItem>
-          </MDBNavbarNav>
-          <MDBNavbarNav right>
-            <MDBNavItem>
-              <MDBDropdown>
-                <MDBDropdownToggle className="dopdown-toggle" nav> 
-             <label>Hi { name }  </label>
-                  <img src={ imageURL } className="rounded-circle z-depth-0"
-                    style={{ height: "35px", padding: 0 }} alt="" />
-                </MDBDropdownToggle>
-                <MDBDropdownMenu className="dropdown-default" right>
-                  <MDBDropdownItem onClick={this.myaccount}> My account</MDBDropdownItem>
-                  <MDBDropdownItem onClick={this.logout}>Log out</MDBDropdownItem>
-                </MDBDropdownMenu>
-              </MDBDropdown>
-            </MDBNavItem>
-          </MDBNavbarNav>
-        </MDBCollapse>
-      </MDBNavbar>
+      <Menu.Menu position='right'>
+          <Dropdown item text={'Hi '+name}>
+            <Dropdown.Menu>
+              <Dropdown.Item onClick={this.myaccount}>My Account</Dropdown.Item>
+              <Dropdown.Item onClick={this.logout}>Logout</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+          </Menu.Menu>
+
+      </Menu>
+
+
+    </Segment>
     );
   }
 }
