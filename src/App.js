@@ -34,9 +34,6 @@ class App extends Component {
              <Route path="/door" component={Door}/>
              <Route path="/account" component={UserAccount}/>
 
-
-
-
              <Route component={Error}/>
             
            </Switch>
