@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer,
-    MDBRow,
-    MDBCol, MDBBtn  }  from 'mdbreact';
+import { Button, Form ,Modal , Card,Image,Icon } from 'semantic-ui-react';
 import axios from 'axios';
 
 export class useraccount extends Component {
@@ -11,7 +9,8 @@ export class useraccount extends Component {
     name:'',
     email:'',
     usertype:'',
-    image:null
+    image:null,
+    imageurl:''
   }
 
   constructor(props) {
@@ -20,7 +19,8 @@ export class useraccount extends Component {
       name:'',
       email:'',
       usertype:'',
-      image:null
+      image:null,
+      imageurl:''
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -54,8 +54,8 @@ export class useraccount extends Component {
               this.setState({name: users.name});
               this.setState({email: users.email });
               this.setState({usertype: users.usertype});
+              this.setState({imageurl: users.image});
 
-        
               // this.setState({ sites });
           })
           .catch (error => {
@@ -115,64 +115,123 @@ export class useraccount extends Component {
 
 
         return (
-            <MDBContainer>
-          <MDBRow>
-            <MDBCol md="6">
-              <form onSubmit={this.updateUser}>
-                <p className="h4 text-center mb-4">My Account Details </p>
-                <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
-                  Your Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  className="form-control"
-                  name="name"
-                  value={this.state.name} onChange={this.handleChange}
-                 required/>
-                <br />
-                <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
-                  Your email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  className="form-control"
-                  name="email"
-                   value={this.state.email} onChange={this.handleChange}
-                 required/>
-                <br />
+        //     <MDBContainer>
+        //   <MDBRow>
+        //     <MDBCol md="6">
+        //       <form onSubmit={this.updateUser}>
+        //         <p className="h4 text-center mb-4">My Account Details </p>
+        //         <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
+        //           Your Name
+        //         </label>
+        //         <input
+        //           type="text"
+        //           id="name"
+        //           className="form-control"
+        //           name="name"
+        //           value={this.state.name} onChange={this.handleChange}
+        //          required/>
+        //         <br />
+        //         <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
+        //           Your email
+        //         </label>
+        //         <input
+        //           type="email"
+        //           id="email"
+        //           className="form-control"
+        //           name="email"
+        //            value={this.state.email} onChange={this.handleChange}
+        //          required/>
+        //         <br />
             
 
-              <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
-                  User Type
-                </label>
-                <input
-                  type="text"
-                  id="usertype"
-                  className="form-control"
-                  name="usertype"
-                   value={this.state.usertype} onChange={this.handleChange}
-                 required/>
-                <br/>
+        //       <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
+        //           User Type
+        //         </label>
+        //         <input
+        //           type="text"
+        //           id="usertype"
+        //           className="form-control"
+        //           name="usertype"
+        //            value={this.state.usertype} onChange={this.handleChange}
+        //          required/>
+        //         <br/>
                 
-              <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
-                  Avatar Image 
-                </label>
-                <p>
-            <input type="file"
-                   id="image"
-                   accept="image/png, image/jpeg"  onChange={this.handleImageChange} required/>
-             </p>
+        //       <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
+        //           Avatar Image 
+        //         </label>
+        //         <p>
+        //     <input type="file"
+        //            id="image"
+        //            accept="image/png, image/jpeg"  onChange={this.handleImageChange} required/>
+        //      </p>
 
-                <div className="text-center mt-4">
-                  <MDBBtn color="indigo" type="submit" >Save Changes</MDBBtn>
-                </div>
-              </form>
-            </MDBCol>
-          </MDBRow>
+        //         <div className="text-center mt-4">
+        //           <MDBBtn color="indigo" type="submit" >Save Changes</MDBBtn>
+        //         </div>
+        //       </form>
+        //     </MDBCol>
+        //   </MDBRow>
 
-        </MDBContainer>
+        // </MDBContainer>
+
+        <Card style={{marginLeft:'400px'}}>
+        <Image src={this.state.imageurl}  size='small' centered circular/>
+        <Card.Content>
+          <Card.Header>{this.state.name}</Card.Header>
+          <Card.Meta>
+        <span className='date'>{this.state.usertype}</span>
+          </Card.Meta>
+          <Card.Description>
+            Account Details
+          </Card.Description>
+          <Form onSubmit={this.updateUser}>
+        <Form.Field >
+          <label> Name </label>
+          <input type='text' placeholder='Name'
+               name="name"   value={this.state.name} onChange={this.handleChange}
+           required/>
+        </Form.Field>
+        <Form.Field >
+          <label> Email </label>
+          <input type='text' placeholder='Email'
+               name="email"   value={this.state.email} onChange={this.handleChange}
+           required/>
+        </Form.Field>
+        <Form.Field >
+          <label> User Type</label>
+          <input type='text' placeholder='User Type'
+               name="usertype"   value={this.state.usertype} onChange={this.handleChange} disabled/>
+        </Form.Field>   
+        <Form.Field >
+        <label>Avatar Image</label>
+         <input type="file" id="image" accept="image/png, image/jpeg"  onChange={this.handleImageChange} required/>
+        </Form.Field>
+        
+        <Button type='submit'>Save Changes</Button>
+        
+        <Modal dimmer='blurring' size='mini' open={this.state.modal} onClose={this.toggle}>
+            <Modal.Header>Message</Modal.Header>
+            <Modal.Content>
+          <p>{this.state.message}</p>
+            </Modal.Content>
+            <Modal.Actions>
+              <Button negative onClick={this.toggle}>Close</Button>
+              {/* <Button positive onClick={this.loginPage}>Login Now</Button> */}
+        
+            </Modal.Actions>
+          </Modal>
+        
+        </Form>
+        </Card.Content>
+        <Card.Content extra>
+          <a>
+            <Icon name='user' />
+            22 Friends
+          </a>
+        </Card.Content>
+      </Card>
+
+      
 
         )
     }

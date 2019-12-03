@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
-import { MDBContainer, MDBRow, MDBCol, MDBBtn,MDBModal,
-    MDBModalBody, MDBModalHeader, 
-    MDBModalFooter } from 'mdbreact';
-
+import { Button, Form ,Modal , Select} from 'semantic-ui-react';
 import axios from 'axios';
 
 
@@ -50,7 +47,11 @@ export class Door extends Component {
             })
               .then(res => {
                 const sites = res.data.sites;
-                this.setState({ sites });
+
+                const mysite= sites.map(({ SiteName, _id }) => ({ text: SiteName, value: _id }));
+
+                this.setState({ sites: mysite });
+
               })
               .catch (error => {
                 console.log(error);
@@ -114,66 +115,47 @@ export class Door extends Component {
         });
       }
 
+      getSite = (event, {value}) => {
+        //console.log(value);
+       // let SiteID = event.target.textContent;
+        this.setState({ SiteID: value});
+    }
+
 
     render() {
         return (
-            <MDBContainer>
-            <MDBRow>
-              <MDBCol md="6">
-                <form onSubmit={this.createDoor}>
-                  <label htmlFor="defaultFormRegisterNameEx" className="grey-text">
-                    Door Name
-                  </label>
-                  <input
-                    type="text"
-                    id="defaultFormRegisterNameEx"
-                    className="form-control"
-                    name="DoorName"
-                    value={this.state.DoorName} onChange={this.handleChange}
+      <Form onSubmit={this.createDoor}>
+      <Form.Field >
+        <label> Door Name </label>
+        <input type='text' placeholder='Door Name'
+             name="DoorName"   value={this.state.DoorName} onChange={this.handleChange}
+         required/>
+      </Form.Field>
+      <Form.Field >
+        <label> Door Location </label>
+        <input type='text' placeholder='Door Location'
+             name="DoorLocation"   value={this.state.DoorLocation} onChange={this.handleChange}
+         required/>
+      </Form.Field>
+      <Form.Field >
+        <label> Site </label>
+        <Select placeholder='Site' options={this.state.sites}  name='SiteID' onChange={this.getSite} required/>
 
-                  />
-                  <br />
-                  <label htmlFor="defaultFormRegisterEmailEx" className="grey-text">
-                    Door Location
-                  </label>
-                  <input
-                    type="text"
-                    id="defaultFormRegisterEmailEx"
-                    className="form-control"
-                    name="DoorLocation"
-                    value={this.state.DoorLocation} onChange={this.handleChange}
-                  />
-                  <br />
-                  <select className="browser-default custom-select" name="SiteID" onChange={this.handleChange}>
-                    <option>Choose your Site</option>
-                    { this.state.sites.map( site =>
+      </Form.Field>
 
-                    <option value={site._id}>{site.SiteName}</option>
-
-
-                    )}
-                    </select>
-                  <div className="text-center mt-4">
-                    <MDBBtn color="unique" type="submit">
-                      Create Door
-                    </MDBBtn>
-                  </div>
-                </form>
-              </MDBCol>
-            </MDBRow>
-
-
-            <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
-        <MDBModalHeader toggle={this.toggle}>Message</MDBModalHeader>
-        <MDBModalBody>
-          {this.state.message}
-        </MDBModalBody>
-        <MDBModalFooter>
-          <MDBBtn color="secondary" onClick={this.toggle}>Close</MDBBtn>
-        </MDBModalFooter>
-      </MDBModal>
-
-          </MDBContainer>
+      <Button type='submit'>Create Door</Button>
+      
+      <Modal dimmer='blurring' size='mini' open={this.state.modal} onClose={this.toggle}>
+          <Modal.Header>Message</Modal.Header>
+          <Modal.Content>
+        <p>{this.state.message}</p>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button negative onClick={this.toggle}>Close</Button>
+      
+          </Modal.Actions>
+        </Modal>
+        </Form>
         )
     }
 }

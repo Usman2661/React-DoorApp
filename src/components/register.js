@@ -123,7 +123,6 @@ export class register extends Component {
       <Button negative onClick={this.toggle}>Close</Button>
       {/* <Button positive onClick={this.loginPage}>Login Now</Button> */}
 
- 
     </Modal.Actions>
   </Modal>
 

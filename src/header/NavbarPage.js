@@ -13,22 +13,25 @@ class NavbarPage extends Component {
     this.state = {
       isOpen: false,
       image:'',
-      name:''
+      name:'',
+      loggedIn:false
     };
   }
     
 state = {
   isOpen: false,
   image:'',
-  name:''
+  name:'',
+  loggedIn: false
 };
 
 
 
 componentDidMount() {
 
-  //Checking user logged in status
   const loggedIn =  localStorage.getItem('loggedIn');
+  this.setState({loggedIn: loggedIn});
+
 
     if (loggedIn) {
 
@@ -120,31 +123,42 @@ render() {
   return (
       <Segment inverted>
       <Menu inverted pointing secondary>
-        <Menu.Item
+      { this.state.loggedIn ?    <Menu.Item
           name='Home'
           active={activeItem === 'Home'}
           onClick={this.handleItemClick}
-        />
-        <Menu.Item
+        /> : null }
+
+     
+{ this.state.loggedIn ?   <Menu.Item
           name='Create Site'
           active={activeItem === 'Create Site'}
           onClick={this.handleItemClick}
-        />
-        <Menu.Item
+        /> : null }
+
+{ this.state.loggedIn ?    <Menu.Item
           name='Create Door'
           active={activeItem === 'Create Door'}
           onClick={this.handleItemClick}
-        />
-         <Menu.Item
+        /> : null }
+
+     
+
+{ this.state.loggedIn ? null :    <Menu.Item
           name='Login'
           active={activeItem === 'Login'}
           onClick={this.handleItemClick}
-        />
-         <Menu.Item
+        /> }
+
+      
+
+{ this.state.loggedIn ? null :     <Menu.Item
           name='Register'
           active={activeItem === 'Register'}
           onClick={this.handleItemClick}
-        />
+        /> }
+
+     
 
       <Menu.Menu position='right'>
           <Dropdown item text={'Hi '+name}>

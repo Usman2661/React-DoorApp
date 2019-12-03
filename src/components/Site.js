@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import { MDBContainer, MDBRow, MDBCol, MDBBtn,MDBModal,
-    MDBModalBody, MDBModalHeader, 
-    MDBModalFooter } from 'mdbreact';
+import { Button, Form ,Modal} from 'semantic-ui-react';
 import axios from 'axios';
    
 export class Site extends Component {
@@ -54,6 +52,7 @@ export class Site extends Component {
       handleChange(event) {
         this.setState({[event.target.name]: event.target.value});
       }
+
       handleImageChange = (e) => {
         this.setState({
           image: e.target.files[0]
@@ -68,8 +67,8 @@ export class Site extends Component {
       }
 
       createSite(event){
-          event.preventDefault();
 
+          event.preventDefault();
           const token =  localStorage.getItem('token');
 
           let form_data = new FormData();
@@ -107,99 +106,59 @@ export class Site extends Component {
         
     render() {
         return (
-            <MDBContainer>
-            <MDBRow>
-              <MDBCol md="6">
-                <form onSubmit={this.createSite}>
-                  <label htmlFor="defaultFormRegisterNameEx" className="grey-text">
-                    Site Name
-                  </label>
-                  <input
-                    type="text"
-                    id="defaultFormRegisterNameEx"
-                    className="form-control"
-                    name="SiteName"
-                    value={this.state.SiteName} onChange={this.handleChange}
+      <Form onSubmit={this.createSite}>
+<Form.Field >
+  <label> Site Name </label>
+  <input type='text' placeholder='Site Name'
+       name="SiteName"   value={this.state.SiteName} onChange={this.handleChange}
+   required/>
+</Form.Field>
+<Form.Field >
+  <label> Site Address Line 1 </label>
+  <input type='text' placeholder='Site Address Line 1'
+       name="SiteAddressLine1"   value={this.state.SiteAddressLine1} onChange={this.handleChange}
+   required/>
+</Form.Field>
+<Form.Field >
+  <label> Site Address Line 2 </label>
+  <input type='text' placeholder='Site Address Line 2'
+       name="SiteAddressLine2"   value={this.state.SiteAddressLine2} onChange={this.handleChange}/>
+</Form.Field>
+<Form.Field >
+  <label> Post Code </label>
+  <input type='text' placeholder='Post Code'
+       name="PostCode"   value={this.state.PostCode} onChange={this.handleChange}
+   required/>
+</Form.Field>
+<Form.Field >
+  <label> City </label>
+  <input type='text' placeholder='City'
+       name="City"   onChange={this.handleChange}
+   required/>
+</Form.Field>
 
-                  required/>
-                  <br />
-                  <label htmlFor="defaultFormRegisterEmailEx" className="grey-text">
-                    Site Address Line 1
-                  </label>
-                  <input
-                    type="text"
-                    id="defaultFormRegisterEmailEx"
-                    className="form-control"
-                    name="SiteAddressLine1"
-                    value={this.state.SiteAddressLine1} onChange={this.handleChange}
+<Form.Field >
+  <label> Site  Image </label>
+  <input type="file"
+  id="image"
+  accept="image/png, image/jpeg"  onChange={this.handleImageChange} required/>
+</Form.Field>
 
-                  required/>
-                  <br />
-                  <label
-                    htmlFor="defaultFormRegisterConfirmEx"
-                    className="grey-text"
-                  >
-                    Site Address Line 2
-                  </label>
-                  <input
-                    type="text"
-                    id="defaultFormRegisterConfirmEx"
-                    className="form-control"
-                    name="SiteAddressLine2"
-                    value={this.state.SiteAddressLine2} onChange={this.handleChange}
-                  />
-                  <br />
-                  <label  htmlFor="defaultFormRegisterConfirmEx" className="grey-text"> Post Code</label>
-                  <input
-                    type="text"
-                    id="defaultFormRegisterConfirmEx"
-                    className="form-control"
-                    name="PostCode"
-                    value={this.state.PostCode} onChange={this.handleChange}
+<Button type='submit'>Create Site</Button>
 
-                  required/>
-                 <br />
-                 <label  htmlFor="defaultFormRegisterConfirmEx" className="grey-text">City</label>
-                  <input
-                    type="text"
-                    id="defaultFormRegisterConfirmEx"
-                    className="form-control"
-                    name="City"
-                    value={this.state.City} onChange={this.handleChange}
-                    
-                  required/>
-                 <br />
-                 <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
-                  Building image 
-                </label>
-                <p>
-            <input type="file"
-                   id="image"
-                   accept="image/png, image/jpeg"  onChange={this.handleImageChange} required/>
-             </p>
+<Modal dimmer='blurring' size='mini' open={this.state.modal} onClose={this.toggle}>
+    <Modal.Header>Message</Modal.Header>
+    <Modal.Content>
+  <p>{this.state.message}</p>
+    </Modal.Content>
+    <Modal.Actions>
+      <Button negative onClick={this.toggle}>Close</Button>
+      {/* <Button positive onClick={this.loginPage}>Login Now</Button> */}
 
-                  <div className="text-center mt-4">
-                    <MDBBtn color="unique" type="submit">
-                      Create Site
-                    </MDBBtn>
-                  </div>
-                </form>
-              </MDBCol>
-            </MDBRow>
+    </Modal.Actions>
+  </Modal>
 
-
-            <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
-        <MDBModalHeader toggle={this.toggle}>Message</MDBModalHeader>
-        <MDBModalBody>
-          {this.state.message}
-        </MDBModalBody>
-        <MDBModalFooter>
-          <MDBBtn color="secondary" onClick={this.toggle}>Close</MDBBtn>
-        </MDBModalFooter>
-      </MDBModal>
-
-
-          </MDBContainer>
+</Form>
         )
     }
 }
