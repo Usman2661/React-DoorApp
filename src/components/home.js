@@ -1,9 +1,22 @@
 import React, { Component, Fragment } from 'react';
-import { Button, Checkbox, Icon, Table , Statistic, Image , Label , Item } from 'semantic-ui-react';
+import { Button, Icon, Table , Statistic, Image , Card ,Label , Item , Segment, Dimmer, Loader, CardContent} from 'semantic-ui-react';
+import '../css/home.css';
 import axios from 'axios';
 
 export class home extends Component {
-     state = { doors: [] };
+     state = { 
+       doors: [],
+       sites: [],
+       Loader:true,
+       Loader1:true
+    };
+
+    constructor(props) {
+      super(props);
+      this.createDoor = this.createDoor.bind(this);
+      this.viewDoor = this.viewDoor.bind(this);
+
+    } 
 
     componentDidMount() {
 
@@ -23,16 +36,51 @@ export class home extends Component {
                 const doors = res.data.doors;
                 console.log(doors)
                 this.setState({ doors: doors });
+                this.setState({ Loader: false });
+
 
               })
               .catch (error => {
                 console.log(error);
               })
+
+
+
+              axios({
+                url: 'http://localhost:3000/api/sites',
+                method: 'get',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+              })
+                .then(res => {
+                  const sites = res.data.sites;
+                  console.log(sites)
+                  this.setState({ sites: sites });
+                  this.setState({ Loader1: false });
+                })
+                .catch (error => {
+                  console.log(error);
+                })
       }
       else {
         this.props.history.push('/');
       }
     }
+
+    createDoor(){
+      this.props.history.push('/door');
+    }
+
+    // showSite(id){
+
+    // }
+
+    viewDoor(id) {
+      this.props.history.push(`/mydoor?id=${id}`);
+    }
+
     render() {
         return (
           <Fragment>
@@ -60,14 +108,32 @@ export class home extends Component {
       
           <Statistic>
             <Statistic.Value>
-              <Icon name='building' />
+              <Icon name='building' /> 
             </Statistic.Value>
             <Statistic.Label>Site with most doors</Statistic.Label>
-          </Statistic>
+          </Statistic>  
 
-
+          <Statistic>
+            <Statistic.Value>
+              <Icon name='users' /> 22
+            </Statistic.Value>
+            <Statistic.Label>Total Users</Statistic.Label>
+          </Statistic>  
         </Statistic.Group>
-   <Table compact celled definition>
+        
+        <Card style={{width:'900px' , marginLeft:'350px'}}>
+    <Card.Content>
+      <Card.Header>Doors</Card.Header>
+    </Card.Content>
+    <Card.Content>
+
+    {this.state.Loader ? 
+     <Dimmer active inverted>
+        <Loader>Loading</Loader>
+      </Dimmer>
+      :  null   
+      }   
+   <Table color='red' key='red' id='doorTable' className='doorTable' name='doorTable'  compact celled definition>
    <Table.Header>
      <Table.Row>
        <Table.HeaderCell />
@@ -84,8 +150,8 @@ export class home extends Component {
      
        <Table.Cell collapsing>
        <Button.Group basic size='small'>
-       <Button icon='eye' />
-    <Button icon='edit' />
+       <Button icon='eye'  onClick={() => this.viewDoor(door._id)}/>
+    {/* <Button icon='edit' /> */}
     <Button icon='delete' />
   </Button.Group>
        </Table.Cell>
@@ -99,7 +165,7 @@ export class home extends Component {
    )}
    </Table.Body>
 
-   <Table.Footer fullWidth>
+   <Table.Header fullWidth>
      <Table.Row>
        <Table.HeaderCell />
        <Table.HeaderCell colSpan='4'>
@@ -109,68 +175,57 @@ export class home extends Component {
            labelPosition='left'
            primary
            size='small'
+
+           onClick={this.createDoor}
          >
            <Icon name='file' /> Add Door
          </Button>
        </Table.HeaderCell>
      </Table.Row>
-   </Table.Footer>
+   </Table.Header>
  </Table> 
+</Card.Content>
+</Card>
 
 
- <Item.Group divided>
-    <Item>
-      <Item.Image src='/images/wireframe/image.png' />
 
+ <Card style={{marginTop:'-850px',marginLeft:'10px'}}>
+    <Card.Content>
+      <Card.Header>Sites</Card.Header>
+    </Card.Content>
+    <Card.Content>
+
+    {/* {this.state.Loader1 ?  */}
+
+     {/* <Dimmer active inverted>
+        <Loader>Loading</Loader>
+      </Dimmer> */}
+
+      {/* :  null   
+      } */}
+
+    <Item.Group link style={{width:'200px'}}>
+    {this.state.sites.map(site =>  
+    <Item
+    // id={site._id} onClick={this.showSite(site._id)} 
+    >
+      <Item.Image size='tiny' src={site.Image} />
       <Item.Content>
-        <Item.Header as='a'>12 Years a Slave</Item.Header>
-        <Item.Meta>
-          <span className='cinema'>Union Square 14</span>
-        </Item.Meta>
-        <Item.Description></Item.Description>
-        <Item.Extra>
-          <Label>IMAX</Label>
-          <Label icon='globe' content='Additional Languages' />
-        </Item.Extra>
+        <Item.Header>{site.SiteName}</Item.Header>
+        <Item.Description>
+         {site.SiteAddressLine1}
+         {/* {site.SiteAddressLine2}
+         {site.PostCode}
+         {site.City} */}
+        </Item.Description>
       </Item.Content>
-    </Item>
-    
-    <Item>
-      <Item.Image src='/images/wireframe/image.png' />
-      <Item.Content>
-        <Item.Header as='a'>My Neighbor Totoro</Item.Header>
-        <Item.Meta>
-          <span className='cinema'>IFC Cinema</span>
-        </Item.Meta>
-        <Item.Description></Item.Description>
-        <Item.Extra>
-          <Button primary floated='right'>
-            Buy tickets
-            <Icon name='right chevron' />
-          </Button>
-          <Label>Limited</Label>
-        </Item.Extra>
-      </Item.Content>
-    </Item>
-
-    <Item>
-      <Item.Image src='/images/wireframe/image.png' />
-
-      <Item.Content>
-        <Item.Header as='a'>Watchmen</Item.Header>
-        <Item.Meta>
-          <span className='cinema'>IFC</span>
-        </Item.Meta>
-        <Item.Description></Item.Description>
-        <Item.Extra>
-          <Button primary floated='right'>
-            Buy tickets
-            <Icon name='right chevron' />
-          </Button>
-        </Item.Extra>
-      </Item.Content>
-    </Item>
+    </Item>   
+  )}
   </Item.Group>
+    </Card.Content>
+  </Card>
+
+
  </Fragment>
         )
     }

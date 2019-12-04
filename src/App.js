@@ -10,10 +10,7 @@ import SiteCreate from './components/Site';
 import Permission from './components/Permission';
 import Door from './components/Door';
 import UserAccount from './components/useraccount';
-
-
-
-
+import MyDoor from './components/doorPage';
 
 
 class App extends Component {
@@ -33,6 +30,8 @@ class App extends Component {
              <Route path="/permission" component={Permission}/>
              <Route path="/door" component={Door}/>
              <Route path="/account" component={UserAccount}/>
+             <Route path="/mydoor" component={MyDoor}/>
+
 
              <Route component={Error}/>
             
