@@ -115,67 +115,8 @@ export class useraccount extends Component {
 
 
         return (
-        //     <MDBContainer>
-        //   <MDBRow>
-        //     <MDBCol md="6">
-        //       <form onSubmit={this.updateUser}>
-        //         <p className="h4 text-center mb-4">My Account Details </p>
-        //         <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
-        //           Your Name
-        //         </label>
-        //         <input
-        //           type="text"
-        //           id="name"
-        //           className="form-control"
-        //           name="name"
-        //           value={this.state.name} onChange={this.handleChange}
-        //          required/>
-        //         <br />
-        //         <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
-        //           Your email
-        //         </label>
-        //         <input
-        //           type="email"
-        //           id="email"
-        //           className="form-control"
-        //           name="email"
-        //            value={this.state.email} onChange={this.handleChange}
-        //          required/>
-        //         <br />
-            
-
-        //       <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
-        //           User Type
-        //         </label>
-        //         <input
-        //           type="text"
-        //           id="usertype"
-        //           className="form-control"
-        //           name="usertype"
-        //            value={this.state.usertype} onChange={this.handleChange}
-        //          required/>
-        //         <br/>
-                
-        //       <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
-        //           Avatar Image 
-        //         </label>
-        //         <p>
-        //     <input type="file"
-        //            id="image"
-        //            accept="image/png, image/jpeg"  onChange={this.handleImageChange} required/>
-        //      </p>
-
-        //         <div className="text-center mt-4">
-        //           <MDBBtn color="indigo" type="submit" >Save Changes</MDBBtn>
-        //         </div>
-        //       </form>
-        //     </MDBCol>
-        //   </MDBRow>
-
-        // </MDBContainer>
-
         <Card style={{marginLeft:'400px'}}>
-        <Image src={this.state.imageurl}  size='small' centered circular/>
+        <Image src={this.state.imageurl}  size='tiny' centered circular/>
         <Card.Content>
           <Card.Header>{this.state.name}</Card.Header>
           <Card.Meta>
@@ -224,10 +165,10 @@ export class useraccount extends Component {
         </Form>
         </Card.Content>
         <Card.Content extra>
-          <a>
+          {/* <a>
             <Icon name='user' />
             22 Friends
-          </a>
+          </a> */}
         </Card.Content>
       </Card>
 

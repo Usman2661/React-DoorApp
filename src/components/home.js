@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Button, Icon, Table , Statistic, Image , Card ,Label , Item , Segment, Dimmer, Loader, CardContent} from 'semantic-ui-react';
+import { Button, Icon, Table , Statistic , Card ,Label , Item , Dimmer, Loader , Confirm} from 'semantic-ui-react';
 import '../css/home.css';
 import axios from 'axios';
 
@@ -8,14 +8,17 @@ export class home extends Component {
        doors: [],
        sites: [],
        Loader:true,
-       Loader1:true
+       Loader1:true,
+       open:false,
+       delete_id:''
     };
 
     constructor(props) {
       super(props);
       this.createDoor = this.createDoor.bind(this);
       this.viewDoor = this.viewDoor.bind(this);
-
+      this.deleteDoor = this.deleteDoor.bind(this);
+      this.handleConfirm = this.handleConfirm.bind(this);
     } 
 
     componentDidMount() {
@@ -81,6 +84,54 @@ export class home extends Component {
       this.props.history.push(`/mydoor?id=${id}`);
     }
 
+    handleConfirm(){
+
+      this.setState({ open: false })
+
+      const doorid = this.state.delete_id;
+
+      const doors= this.state.doors;
+      for (var i =0; i < doors.length; i++)
+          if (doors[i]._id === doorid) {
+          doors.splice(i,1);
+          break;
+      }
+
+      this.setState({ doors: doors });
+
+      const token = localStorage.getItem('token');
+      axios({
+        url: 'http://localhost:3000/api/door',
+        method: 'delete',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        data: {
+          id:doorid
+        }
+      })
+        .then(res => {
+          const door = res.data.doors;
+          console.log(door)
+
+          
+        })
+        .catch (error => {
+          console.log(error);
+
+          this.setState({ open: false })
+        })
+
+    }
+    handleCancel = () => this.setState({ open: false })
+
+    deleteDoor(id) {
+      const doorid=id;
+      this.setState({ delete_id: doorid });
+      this.setState({ open: true })
+    }
+
     render() {
         return (
           <Fragment>
@@ -121,7 +172,7 @@ export class home extends Component {
           </Statistic>  
         </Statistic.Group>
         
-        <Card style={{width:'900px' , marginLeft:'350px'}}>
+        <Card style={{ position:'absolute',width:'900px', marginLeft:'350px'}}>
     <Card.Content>
       <Card.Header>Doors</Card.Header>
     </Card.Content>
@@ -152,7 +203,7 @@ export class home extends Component {
        <Button.Group basic size='small'>
        <Button icon='eye'  onClick={() => this.viewDoor(door._id)}/>
     {/* <Button icon='edit' /> */}
-    <Button icon='delete' />
+    <Button style={{color:'red'}} icon='delete' onClick={() => this.deleteDoor(door._id)} />
   </Button.Group>
        </Table.Cell>
     <Table.Cell>{door.SiteID}</Table.Cell>
@@ -186,10 +237,13 @@ export class home extends Component {
  </Table> 
 </Card.Content>
 </Card>
-
-
-
- <Card style={{marginTop:'-850px',marginLeft:'10px'}}>
+<Confirm
+          open={this.state.open}
+          header='Delete Door'
+          onCancel={this.handleCancel}
+          onConfirm={this.handleConfirm}
+        />
+ <Card style={{position:'absolute',marginLeft:'10px'}}>
     <Card.Content>
       <Card.Header>Sites</Card.Header>
     </Card.Content>
