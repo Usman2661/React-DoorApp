@@ -10,7 +10,10 @@ export class home extends Component {
        Loader:true,
        Loader1:true,
        open:false,
-       delete_id:''
+       delete_id:'',
+       totalUsers:'',
+       totalSites:'',
+       totalDoors:''
     };
 
     constructor(props) {
@@ -27,6 +30,7 @@ export class home extends Component {
       if (loggedIn){
         const token =  localStorage.getItem('token');
 
+        //Getting the doors
             axios({
               url: 'http://localhost:3000/api/doors',
               method: 'get',
@@ -40,15 +44,14 @@ export class home extends Component {
                 console.log(doors)
                 this.setState({ doors: doors });
                 this.setState({ Loader: false });
-
-
               })
               .catch (error => {
                 console.log(error);
+                this.setState({ Loader1: false });
               })
 
 
-
+            // Getting the sites
               axios({
                 url: 'http://localhost:3000/api/sites',
                 method: 'get',
@@ -66,6 +69,58 @@ export class home extends Component {
                 .catch (error => {
                   console.log(error);
                 })
+
+                //Getting total doors
+                axios({
+                  url: 'http://localhost:3000/api/totalDoors',
+                  method: 'get',
+                  headers: {
+                      'Authorization': `Bearer ${token}`,
+                      'Content-Type': 'application/json'
+                  }
+                })
+                  .then(res => {
+                    const totalDoors = res.data.doors;
+                    this.setState({ totalDoors: totalDoors });
+                  })
+                  .catch (error => {
+                    console.log(error);
+                  })
+
+                //Getting total Sites
+                axios({
+                  url: 'http://localhost:3000/api/totalSites',
+                  method: 'get',
+                  headers: {
+                      'Authorization': `Bearer ${token}`,
+                      'Content-Type': 'application/json'
+                  }
+                })
+                  .then(res => {
+                    const totalSites = res.data.sites;
+                    this.setState({ totalSites: totalSites });
+
+                  })
+                  .catch (error => {
+                    console.log(error);
+                  })
+
+                //Getting total users
+                axios({
+                  url: 'http://localhost:3000/api/user/totalUsers',
+                  method: 'get',
+                  headers: {
+                      'Authorization': `Bearer ${token}`,
+                      'Content-Type': 'application/json'
+                  }
+                })
+                  .then(res => {
+                    const totalUsers = res.data.users;
+                    this.setState({ totalUsers: totalUsers });
+                  })
+                  .catch (error => {
+                    console.log(error);
+                  })
       }
       else {
         this.props.history.push('/');
@@ -135,10 +190,12 @@ export class home extends Component {
     render() {
         return (
           <Fragment>
+              <Card style={{position:'absolute',marginLeft:'10px', width:'1300px'}}>
+          <Card.Content>
           <Statistic.Group widths='four'>
           <Statistic>
             <Statistic.Value>
-              <Icon name='building' />5
+              <Icon name='building' />{this.state.totalDoors}
             </Statistic.Value>
             <Statistic.Label>Total Doors</Statistic.Label>
           </Statistic>
@@ -152,7 +209,7 @@ export class home extends Component {
           </Statistic> */}
           <Statistic>
             <Statistic.Value>
-              <Icon name='building' />5
+              <Icon name='building' />{this.state.totalSites}
             </Statistic.Value>
             <Statistic.Label>Total Sites</Statistic.Label>
           </Statistic>
@@ -166,13 +223,16 @@ export class home extends Component {
 
           <Statistic>
             <Statistic.Value>
-              <Icon name='users' /> 22
+              <Icon name='users' /> {this.state.totalUsers}
             </Statistic.Value>
             <Statistic.Label>Total Users</Statistic.Label>
           </Statistic>  
         </Statistic.Group>
+          </Card.Content>
+        </Card>
         
-        <Card style={{ position:'absolute',width:'900px', marginLeft:'350px'}}>
+        
+        <Card style={{ position:'absolute',width:'900px', marginLeft:'350px',marginTop:'150px'}}>
     <Card.Content>
       <Card.Header>Doors</Card.Header>
     </Card.Content>
@@ -243,7 +303,7 @@ export class home extends Component {
           onCancel={this.handleCancel}
           onConfirm={this.handleConfirm}
         />
- <Card style={{position:'absolute',marginLeft:'10px'}}>
+ <Card style={{position:'absolute',marginLeft:'10px',marginTop:'150px'}}>
     <Card.Content>
       <Card.Header>Sites</Card.Header>
     </Card.Content>

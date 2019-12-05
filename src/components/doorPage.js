@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Icon, Image ,Button, Comment, Form, Header, Dimmer,Loader  } from 'semantic-ui-react';
+import { Card, Icon, Image ,Button, Comment, Form, Header, Dimmer,Loader, Feed  } from 'semantic-ui-react';
 import axios from 'axios';
 
 export class doorPage extends Component {
@@ -104,37 +104,42 @@ export class doorPage extends Component {
         {this.state.DateTimeCreated}
       </Card.Description>
     </Card.Content>
-     {/* )}  */}
+    
     <Card.Content extra>
-    <Comment.Group size='large'>
+
+      
     <Header as='h3' dividing>
       Documents
     </Header>
 
-    { this.state.DoorDocuments.map(mydoor =>   
-    <Comment>
-      <Comment.Avatar href={mydoor.Document} src='http://localhost:3000/uploads/1575483118931-pdf-icon-vector-3.jpg' />
-      <Comment.Content>
-        <Comment.Author as='a'>{mydoor.DocumentTitle}</Comment.Author>
-        <Comment.Metadata>
-          <div>{mydoor.DateTime}</div>
-        </Comment.Metadata>
-        {/* <Comment.Text>How artistic!</Comment.Text> */}
-        {/* <Comment.Actions>
-          <Comment.Action>Reply</Comment.Action>
-        </Comment.Actions> */}
 
-      <a href={mydoor.Document}>Download Document</a>
+<Feed size='large'>
+{ this.state.DoorDocuments.map(mydoor =>   
 
-      </Comment.Content>
-    </Comment>
-    )}
+    <Feed.Event>
+      <Feed.Label href={mydoor.Document} image='http://localhost:3000/uploads/1575483118931-pdf-icon-vector-3.jpg' />
+      <Feed.Content>
+        <Feed.Summary>
+          <Feed.User href={mydoor.Document} >Document Added</Feed.User> {mydoor.DocumentTitle}
+          <Feed.Date>{mydoor.DateTime}</Feed.Date>
+        </Feed.Summary>
+        <Feed.Meta>
+          <Feed.Like href={mydoor.Document}>
+            <Icon name='download' />
+          </Feed.Like>
+        </Feed.Meta>
+        <Feed.Meta>
+          <Feed.Like >
+            <Icon name='delete' />
+          </Feed.Like>
+        </Feed.Meta>
+      </Feed.Content>
+    </Feed.Event>
+)}
+  </Feed>
+  
 
-    <Form reply>
-      <Form.TextArea />
-      <Button content='Add Reply' labelPosition='left' icon='edit' primary />
-    </Form>
-  </Comment.Group>
+
     </Card.Content>
   </Card>
 
