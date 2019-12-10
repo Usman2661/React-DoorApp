@@ -160,7 +160,7 @@ export class Door extends Component {
       </Form.Field>
 
       <Form.Field >
-  <label> Site  Image </label>
+  <label> Door Image </label>
   <input type="file"
   id="image"
   accept="image/png, image/jpeg"  onChange={this.handleImageChange} required/>

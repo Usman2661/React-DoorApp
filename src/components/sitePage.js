@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Header, Image, Table , Card , Dimmer, Loader, Button , Item, Label, Form, Input} from 'semantic-ui-react';
+import { Header, Image, Table , Card , Dimmer, Loader, Button , Item, Confirm, Form, Input} from 'semantic-ui-react';
 import axios from 'axios';
 export class sitePage extends Component {
 
@@ -10,6 +10,7 @@ export class sitePage extends Component {
         id:'',
         Loader: true,
         Loader1: true,
+        open:false,
         SiteName:''
       }
     
@@ -21,7 +22,9 @@ export class sitePage extends Component {
         this.viewDoor = this.viewDoor.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.updateSite = this.updateSite.bind(this);
-
+        this.handleConfirm = this.handleConfirm.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
+        this.deleteDoor = this.deleteDoor.bind(this);
       } 
     componentDidMount() {
 
@@ -37,10 +40,8 @@ export class sitePage extends Component {
             this.getSiteDoors();
             this.getSite();
             console.log(this.state.SiteName);
-
             console.log(this.state.SiteAddressLine1);
 
-      
            }
           else {
             this.props.history.push('/');
@@ -113,6 +114,12 @@ export class sitePage extends Component {
             this.props.history.push(`/mydoor?id=${id}`);
         }
 
+        deleteDoor(id) {
+          const doorid=id;
+          this.setState({ delete_id: doorid });
+          this.setState({ open: true })
+        }
+
         updateSite(event){
           event.preventDefault();
           this.setState({Loader1: true});
@@ -151,11 +158,53 @@ export class sitePage extends Component {
           })
 
         }
+
+        handleConfirm(){
+
+          this.setState({ open: false })
+          this.setState({ Loader: true })
+
+    
+          const doorid = this.state.delete_id;
+    
+          const token = localStorage.getItem('token');
+          axios({
+            url: 'http://localhost:3000/api/door',
+            method: 'delete',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            data: {
+              id:doorid
+            }
+          })
+            .then(res => {
+              const door = res.data.doors;
+              console.log(door)
+              this.getSiteDoors();
+              this.setState({ Loader: false })
+            })
+            .catch (error => {
+              console.log(error);
+    
+              this.setState({ open: false })
+            })
+    
+        }
+        handleCancel = () => this.setState({ open: false })
+        
     render() {
         return (
        <Fragment>
  <Card style={{position:'absolute',marginLeft:'570px',width:'500px'}}>
     <Card.Content>
+    <Confirm
+          open={this.state.open}
+          header='Delete Door'
+          onCancel={this.handleCancel}
+          onConfirm={this.handleConfirm}
+        />
             <Table basic='very' celled collapsing >
                {this.state.Loader ? 
      <Dimmer active inverted>

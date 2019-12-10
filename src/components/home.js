@@ -30,29 +30,7 @@ export class home extends Component {
       const loggedIn =  localStorage.getItem('loggedIn');
       if (loggedIn){
         const token =  localStorage.getItem('token');
-
-        //Getting the doors
-            axios({
-              url: 'http://localhost:3000/api/doors',
-              method: 'get',
-              headers: {
-                  'Authorization': 'Bearer '+token,
-                  'Content-Type': 'application/json'
-              }
-            })
-              .then(res => {
-                const doors = res.data.doors;
-                console.log(doors)
-                this.setState({ doors: doors });
-                this.setState({ Loader: false });
-              })
-              .catch (error => {
-                console.log(error);
-                this.setState({ Loader1: false });
-              })
-
-
-            // Getting the sites
+             // Getting the sites
               axios({
                 url: 'http://localhost:3000/api/sites',
                 method: 'get',
@@ -122,6 +100,29 @@ export class home extends Component {
                   .catch (error => {
                     console.log(error);
                   })
+
+        //Getting the doors
+            axios({
+              url: 'http://localhost:3000/api/doors',
+              method: 'get',
+              headers: {
+                  'Authorization': 'Bearer '+token,
+                  'Content-Type': 'application/json'
+              }
+            })
+              .then(res => {
+                const doors = res.data.doors;
+                console.log(doors)
+                this.setState({ doors: doors });
+                this.setState({ Loader: false });
+              })
+              .catch (error => {
+                console.log(error);
+                this.setState({ Loader1: false });
+              })
+
+
+      
       }
       else {
         this.props.history.push('/');
