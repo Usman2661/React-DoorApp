@@ -12,7 +12,9 @@ export class Door extends Component {
        SiteID: '',
        modal: false,
        message:'',
-       datetime:''
+       datetime:'',
+       image:null,
+       file:null
       };
 
 
@@ -20,6 +22,8 @@ export class Door extends Component {
         super(props);
         this.handleChange = this.handleChange.bind(this);
         this.createDoor = this.createDoor.bind(this);
+        this.handleImageChange = this.handleImageChange.bind(this);
+
       } 
 
 
@@ -33,10 +37,8 @@ export class Door extends Component {
             if(usertype!=='Manager'){
                 this.props.history.push('/permission');
             }
-            else{
-                
+            else{   
             const token =  localStorage.getItem('token');
-
             axios({
               url: 'http://localhost:3000/api/sites',
               method: 'get',
@@ -56,6 +58,8 @@ export class Door extends Component {
               .catch (error => {
                 console.log(error);
               })
+
+              console.log(this.state.sites);
               var currentDateTime = new Date();
               var date = currentDateTime.getFullYear() + '-' + (currentDateTime.getMonth()+1) + '-' + currentDateTime.getDate() +' '+ currentDateTime.getHours()+':'+ currentDateTime.getMinutes()+':'+ currentDateTime.getSeconds();
 
@@ -78,18 +82,20 @@ export class Door extends Component {
         event.preventDefault();
         const token =  localStorage.getItem('token');
 
-        const headers = {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer '+token
-        }
-    
-        axios.post('http://localhost:3000/api/door', { 
-          SiteID: this.state.SiteID, 
-          DoorName: this.state.DoorName,
-          DoorLocation: this.state.DoorLocation, 
-          DateTimeCreated: this.state.datetime
-        }, {
-          headers:headers
+        let form_data = new FormData();
+        form_data.append('file', this.state.image, this.state.image.name);
+        form_data.append('DoorName', this.state.DoorName);
+        form_data.append('DoorLocation', this.state.DoorLocation);
+        form_data.append('SiteID', this.state.SiteID);
+        form_data.append('DateTimeCreated', this.state.datetime);
+
+        let url = 'http://localhost:3000/api/door';
+
+        axios.post(url, form_data, {
+          headers: {
+            'content-type': 'multipart/form-data',
+            'Authorization': 'Bearer '+token
+          }
         })
        .then(res => {
           console.log(res);
@@ -115,11 +121,22 @@ export class Door extends Component {
         });
       }
 
-      getSite = (event, {value}) => {
-        //console.log(value);
-       // let SiteID = event.target.textContent;
-        this.setState({ SiteID: value});
+    getSite = (event, {value}) => {
+      //console.log(value);
+      // let SiteID = event.target.textContent;
+      this.setState({ SiteID: value});
     }
+
+    handleImageChange = (e) => {
+      this.setState({
+        image: e.target.files[0]
+      })
+      this.setState({
+        file: URL.createObjectURL(e.target.files[0])
+      })
+      
+    };
+
 
 
     render() {
@@ -140,8 +157,17 @@ export class Door extends Component {
       <Form.Field >
         <label> Site </label>
         <Select placeholder='Site' options={this.state.sites}  name='SiteID' onChange={this.getSite} required/>
-
       </Form.Field>
+
+      <Form.Field >
+  <label> Site  Image </label>
+  <input type="file"
+  id="image"
+  accept="image/png, image/jpeg"  onChange={this.handleImageChange} required/>
+  <img src={this.state.file} style={{ width:'200px', height:'150px'}}/>
+
+</Form.Field>
+
 
       <Button type='submit'>Create Door</Button>
       

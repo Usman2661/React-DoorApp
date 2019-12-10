@@ -39,9 +39,7 @@ export class register extends Component {
   }
 
   getUserType = (event, {value}) => {
-    console.log(value);
-    let usertype = event.target.textContent;
-    this.setState({ usertype: usertype});
+    this.setState({ usertype: value});
 }
 
 

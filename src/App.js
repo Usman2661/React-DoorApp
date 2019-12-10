@@ -2,7 +2,7 @@ import React , { Component} from 'react';
 import './App.css';
 import Navbar from './header/NavbarPage';
 import Login from './components/login'
-import { BrowserRouter as Router , Route , Switch , Link} from 'react-router-dom';
+import { BrowserRouter as Router , Route , Switch } from 'react-router-dom';
 import Register from './components/register';
 import Error from './components/Error';
 import Home from './components/home';
@@ -11,6 +11,8 @@ import Permission from './components/Permission';
 import Door from './components/Door';
 import UserAccount from './components/useraccount';
 import MyDoor from './components/doorPage';
+import MySite from './components/sitePage';
+
 
 
 class App extends Component {
@@ -31,6 +33,8 @@ class App extends Component {
              <Route path="/door" component={Door}/>
              <Route path="/account" component={UserAccount}/>
              <Route path="/mydoor" component={MyDoor}/>
+             <Route path="/mysite" component={MySite}/>
+
 
 
              <Route component={Error}/>

@@ -20,6 +20,7 @@ export class home extends Component {
       super(props);
       this.createDoor = this.createDoor.bind(this);
       this.viewDoor = this.viewDoor.bind(this);
+      this.viewSite = this.viewSite.bind(this);
       this.deleteDoor = this.deleteDoor.bind(this);
       this.handleConfirm = this.handleConfirm.bind(this);
     } 
@@ -130,13 +131,11 @@ export class home extends Component {
     createDoor(){
       this.props.history.push('/door');
     }
-
-    // showSite(id){
-
-    // }
-
     viewDoor(id) {
       this.props.history.push(`/mydoor?id=${id}`);
+    }
+    viewSite(id) {
+      this.props.history.push(`/mysite?id=${id}`);
     }
 
     handleConfirm(){
@@ -309,20 +308,16 @@ export class home extends Component {
     </Card.Content>
     <Card.Content>
 
-    {/* {this.state.Loader1 ?  */}
-
-     {/* <Dimmer active inverted>
+    {this.state.Loader1 ? 
+     <Dimmer active inverted>
         <Loader>Loading</Loader>
-      </Dimmer> */}
-
-      {/* :  null   
-      } */}
+      </Dimmer>
+      :  null   
+      } 
 
     <Item.Group link style={{width:'200px'}}>
     {this.state.sites.map(site =>  
-    <Item
-    // id={site._id} onClick={this.showSite(site._id)} 
-    >
+    <Item onClick={() => this.viewSite(site._id)}>
       <Item.Image size='tiny' src={site.Image} />
       <Item.Content>
         <Item.Header>{site.SiteName}</Item.Header>
@@ -331,9 +326,13 @@ export class home extends Component {
          {/* {site.SiteAddressLine2}
          {site.PostCode}
          {site.City} */}
+                 <Button floated='right' size='tiny' icon='delete' style={{marginLeft:'100px'}}/>
+
         </Item.Description>
       </Item.Content>
+      <hr></hr>
     </Item>   
+
   )}
   </Item.Group>
     </Card.Content>

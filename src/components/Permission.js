@@ -9,5 +9,4 @@ export class Permission extends Component {
         )
     }
 }
-
 export default Permission
