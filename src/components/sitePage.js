@@ -143,7 +143,6 @@ export class sitePage extends Component {
 
           const token = localStorage.getItem('token');
 
-
           const options = {
             headers: {
               'Authorization': 'Bearer '+token,

@@ -125,15 +125,7 @@ export class doorPage extends Component {
    
 
       toggle1 = () => {
-
-        // const usertype = localStorage.getItem('usertype');
-        // if (usertype==='Manager'){
-
-        // }
-        // else{
-
-        // }
-
+    
         const usertype = localStorage.getItem('usertype');
         if (usertype==='Manager'){
           this.setState({
@@ -294,12 +286,38 @@ export class doorPage extends Component {
       </Dimmer>
       :  null   
       }
-
 <Feed size='large'>
 { this.state.DoorDocuments.map(mydoor =>   
 
-    <Feed.Event>
-      <Feed.Label href={mydoor.Document} image='http://localhost:3000/uploads/1575483118931-pdf-icon-vector-3.jpg' />
+      <Feed.Event>
+        {mydoor.Document.includes('.pdf') ? 
+        <Feed.Label href={mydoor.Document} 
+        image='http://localhost:3000/uploads/1575483118931-pdf-icon-vector-3.jpg' 
+        />
+      :  null   
+      }
+        {mydoor.Document.includes('.docx')  ? 
+        <Feed.Label href={mydoor.Document} 
+        image='http://localhost:3000/uploads/word.png' 
+        />
+      :  null   
+      }
+        {mydoor.Document.includes('.PNG') || mydoor.Document.includes('.jpg') || mydoor.Document.includes('.jpeg')  ? 
+        <Feed.Label href={mydoor.Document} 
+        image='http://localhost:3000/uploads/file.png' 
+        />
+      :  null   
+      }
+        {mydoor.Document.includes('.csv')  || mydoor.Document.includes('.xlsx') || mydoor.Document.includes('.xls') ? 
+        <Feed.Label href={mydoor.Document} 
+        image='http://localhost:3000/uploads/excel.png' 
+        />
+      :  null   
+      }
+
+     
+     
+   
       <Feed.Content>
         <Feed.Summary>
           <Feed.User href={mydoor.Document} >Document Added</Feed.User> {mydoor.DocumentTitle}

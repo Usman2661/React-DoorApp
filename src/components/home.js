@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Button, Icon, Table , Statistic , Card
    ,Header, Image , Item , Dimmer, Loader , Confirm , Modal,
-  Form, Input} from 'semantic-ui-react';
+  Form} from 'semantic-ui-react';
 import '../css/home.css';
 import axios from 'axios';
 
@@ -17,7 +17,9 @@ export class home extends Component {
        totalUsers:'',
        totalSites:'',
        totalDoors:'',
-       open15: false
+       open15: false,
+       UpdateLoader:false,
+       open136:false
     };
 
     constructor(props) {
@@ -29,36 +31,21 @@ export class home extends Component {
       this.handleConfirm = this.handleConfirm.bind(this);
       this.editDoor = this.editDoor.bind(this);
       this.updateDoor = this.updateDoor.bind(this);
-      this.toggle = this.toggle.bind(this);
-      this.handleChange = this.handleChange.bind(this);
+      this.handleCancel2 = this.handleCancel2.bind(this);
+      this.handleCancel136 = this.handleCancel136.bind(this);
 
+      this.handleChange = this.handleChange.bind(this);
+      this.deleteSite = this.deleteSite.bind(this);
+      this.deletedSite = this.deletedSite.bind(this);
 
     } 
 
     componentDidMount() {
-
       const loggedIn =  localStorage.getItem('loggedIn');
       if (loggedIn){
         const token =  localStorage.getItem('token');
-             // Getting the sites
-              axios({
-                url: 'http://localhost:3000/api/sites',
-                method: 'get',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-              })
-                .then(res => {
-                  const sites = res.data.sites;
-                  console.log(sites)
-                  this.setState({ sites: sites });
-                  this.setState({ Loader1: false });
-                })
-                .catch (error => {
-                  console.log(error);
-                })
 
+        this.getSites();
                 //Getting total doors
                 axios({
                   url: 'http://localhost:3000/api/totalDoors',
@@ -135,27 +122,8 @@ export class home extends Component {
                   .catch (error => {
                     console.log(error);
                   })
-            //Getting the doors
-            axios({
-              url: 'http://localhost:3000/api/doors',
-              method: 'get',
-              headers: {
-                  'Authorization': 'Bearer '+token,
-                  'Content-Type': 'application/json'
-              }
-            })
-              .then(res => {
-                const doors = res.data.doors;
-        
-                this.setState({ doors: doors });
-                this.setState({ Loader: false });
-                console.log(this.state.doors);
-              })
-              .catch (error => {
-                console.log(error);
-                this.setState({ Loader1: false });
-              })
-
+          
+                  this.getDoors();
 
       
       }
@@ -164,6 +132,59 @@ export class home extends Component {
       }
     }
 
+    getDoors(){
+      
+      this.setState({ Loader: true });
+
+      const token = localStorage.getItem('token');
+      //Getting the doors
+      axios({
+        url: 'http://localhost:3000/api/doors',
+        method: 'get',
+        headers: {
+            'Authorization': 'Bearer '+token,
+            'Content-Type': 'application/json'
+        }
+      })
+        .then(res => {
+          const doors = res.data.doors;
+
+          this.setState({ doors: doors });
+          this.setState({ Loader: false });
+          console.log(this.state.doors);
+        })
+        .catch (error => {
+          console.log(error);
+          this.setState({ Loader1: false });
+        })
+    }
+
+    getSites(){
+
+      this.setState({ Loader1: true });
+
+      const token = localStorage.getItem('token');
+
+          // Getting the sites
+          axios({
+            url: 'http://localhost:3000/api/sites',
+            method: 'get',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+          })
+            .then(res => {
+              const sites = res.data.sites;
+              console.log(sites)
+              this.setState({ sites: sites });
+              this.setState({ Loader1: false });
+            })
+            .catch (error => {
+              console.log(error);
+            })
+
+    }
     createDoor(){
       this.props.history.push('/door');
     }
@@ -213,8 +234,9 @@ export class home extends Component {
     }
     handleCancel = () => this.setState({ open: false })
     handleCancel1 = () => this.setState({ open1: false })
+    handleCancel136 = () => this.setState({ open136: false })
 
-    toggle(){
+    handleCancel2  (){
       this.setState({ open15: false });
     }
 
@@ -225,23 +247,61 @@ export class home extends Component {
 
     editDoor(id,DoorName,DoorLocation,DateTimeCreated, doorimage){
 
-      this.setState({ doorid: id });
-      this.setState({ DoorName: DoorName });
-      this.setState({ DoorLocation: DoorLocation });
-      this.setState({ DateTimeCreated: DateTimeCreated });
-      this.setState({ doorimage: doorimage });
-      this.setState({ open15: true });
+      const usertype = localStorage.getItem('usertype');
+      if (usertype==='Manager'){
+        this.setState({ doorid: id });
+        this.setState({ DoorName: DoorName });
+        this.setState({ DoorLocation: DoorLocation });
+        this.setState({ DateTimeCreated: DateTimeCreated });
+        this.setState({ doorimage: doorimage });
+        this.setState({ open15: true });
+      }
+      else{
+        this.setState({
+          open1: true
+        });
+      }
+
+     
     }
 
     
     updateDoor(event){
       event.preventDefault();
-      console.log(this.state.DoorLocation);
-      console.log(this.state.DoorName);
-      console.log(this.state.doorid);
+      
+      this.setState({UpdateLoader: true});
+
+      const token = localStorage.getItem('token');
+
+      const options = {
+        headers: {
+          'Authorization': 'Bearer '+token,
+          'Content-Type': 'application/json'
+      }
+      };
+
+      axios.put('http://localhost:3000/api/updateDoor', { 
+        id: this.state.doorid, 
+        DoorName: this.state.DoorName,
+        DoorLocation: this.state.DoorLocation
+       },
+       options
+       )
+      .then(res => {
+        console.log(res.data);
+        this.setState({UpdateLoader: false});
+        this.setState({open15: false});
+        this.getDoors();
+
+      })
+      .catch(error => {
+        console.log(error);
+        console.log(error.message);
+        this.setState({UpdateLoader: false}); 
+        this.setState({open15: false});
+      })
 
       
-      this.setState({ open15: false });
 
     }
 
@@ -256,8 +316,51 @@ export class home extends Component {
       else {
         this.setState({ open1: true })
       }
-
     }
+
+    deletedSite(event){
+      event.preventDefault();
+      
+      const token = localStorage.getItem('token');
+      axios({
+        url: 'http://localhost:3000/api/site',
+        method: 'delete',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        data: {
+          id:this.state.SiteID
+        }
+       })
+        .then(res => {
+          const site = res.data.site;
+          console.log(site);
+          this.setState({ open136: false })
+          this.getSites();
+        })
+        .catch (error => {
+          console.log(error);
+          this.setState({ open136: false });
+          this.getSites();
+        })
+    }
+
+    deleteSite(id) {
+
+      const usertype = localStorage.getItem('usertype');
+      if(usertype==='Manager'){
+        const SiteID=id;
+        this.setState({ SiteID: SiteID });
+        this.setState({ open136: true })
+
+
+      }
+      else {
+        this.setState({ open1: true })
+      }
+    }
+
 
     render() {
         return (
@@ -390,22 +493,24 @@ export class home extends Component {
       :  null   
       } 
 
-    <Item.Group link style={{width:'200px'}}>
+    <Item.Group  style={{width:'200px'}} divided>
     {this.state.sites.map(site =>  
-    <Item onClick={() => this.viewSite(site._id)}>
+
+// onClick={() => this.viewSite(site._id)}
+    <Item >
       <Item.Image size='tiny' src={site.Image} />
       <Item.Content>
         <Item.Header>{site.SiteName}</Item.Header>
         <Item.Description>
          {site.SiteAddressLine1}
-         {/* {site.SiteAddressLine2}
-         {site.PostCode}
-         {site.City} */}
-                 <Button floated='right' size='tiny' icon='delete' style={{marginLeft:'100px'}}/>
-
         </Item.Description>
+
+        <Item.Extra>
+        <Button floated='right' size='tiny'  icon='eye' onClick={() => this.viewSite(site._id)}/>
+        <Button floated='right' size='tiny' color='red' icon='delete' Red  onClick={() => this.deleteSite(site._id)}/>
+        </Item.Extra>
       </Item.Content>
-      <hr></hr>
+
     </Item>   
 
   )}
@@ -416,7 +521,7 @@ export class home extends Component {
       <Header icon='lock' content='Un-Authorised' />
       <Modal.Content>
         <p>
-          You dont have permissions to delete the door
+          You dont have permissions to perform this action
         </p>
       </Modal.Content>
       <Modal.Actions>
@@ -426,6 +531,14 @@ export class home extends Component {
       </Modal.Actions>
     </Modal>
     <Modal open={this.state.open15}>
+
+    {this.state.UpdateLoader ? 
+     <Dimmer active inverted>
+        <Loader>Loading</Loader>
+      </Dimmer>
+      :  null   
+      }   
+
     <Modal.Header>Edit Door</Modal.Header>
     <Modal.Content image>
       <Image wrapped size='medium' src={this.state.doorimage} />
@@ -466,6 +579,13 @@ export class home extends Component {
     </Modal.Actions>
 
   </Modal>
+
+  <Confirm
+          open={this.state.open136}
+          header='Delete Site'
+          onCancel={this.handleCancel136}
+          onConfirm={this.deletedSite}
+        />
 
   </Card>
 
