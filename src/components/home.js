@@ -1,5 +1,7 @@
 import React, { Component, Fragment } from 'react';
-import { Button, Icon, Table , Statistic , Card ,Label , Item , Dimmer, Loader , Confirm} from 'semantic-ui-react';
+import { Button, Icon, Table , Statistic , Card
+   ,Header, Image , Item , Dimmer, Loader , Confirm , Modal,
+  Form, Input} from 'semantic-ui-react';
 import '../css/home.css';
 import axios from 'axios';
 
@@ -10,10 +12,12 @@ export class home extends Component {
        Loader:true,
        Loader1:true,
        open:false,
+       open1:false,
        delete_id:'',
        totalUsers:'',
        totalSites:'',
-       totalDoors:''
+       totalDoors:'',
+       open15: false
     };
 
     constructor(props) {
@@ -23,6 +27,12 @@ export class home extends Component {
       this.viewSite = this.viewSite.bind(this);
       this.deleteDoor = this.deleteDoor.bind(this);
       this.handleConfirm = this.handleConfirm.bind(this);
+      this.editDoor = this.editDoor.bind(this);
+      this.updateDoor = this.updateDoor.bind(this);
+      this.toggle = this.toggle.bind(this);
+      this.handleChange = this.handleChange.bind(this);
+
+
     } 
 
     componentDidMount() {
@@ -101,7 +111,31 @@ export class home extends Component {
                     console.log(error);
                   })
 
-        //Getting the doors
+                  // Getting Site With Most Doors
+                   axios({
+                  url: 'http://localhost:3000/api/sitewithmostdoors',
+                  method: 'get',
+                  headers: {
+                      'Authorization': `Bearer ${token}`,
+                      'Content-Type': 'application/json'
+                  }
+                })
+                  .then(res => {
+                    const sitewithmostdoors = res.data.site;
+
+                    { sitewithmostdoors.map(door =>  
+                      this.setState({ sitewithmostdoorsID: door._id })
+                    )}
+
+                    const mysite = this.state.sites.find(x => x._id === this.state.sitewithmostdoorsID).SiteName;
+                    this.setState({ mysite: mysite });
+
+                    // this.setState({ totalUsers: totalUsers });
+                  })
+                  .catch (error => {
+                    console.log(error);
+                  })
+            //Getting the doors
             axios({
               url: 'http://localhost:3000/api/doors',
               method: 'get',
@@ -112,9 +146,10 @@ export class home extends Component {
             })
               .then(res => {
                 const doors = res.data.doors;
-                console.log(doors)
+        
                 this.setState({ doors: doors });
                 this.setState({ Loader: false });
+                console.log(this.state.doors);
               })
               .catch (error => {
                 console.log(error);
@@ -165,26 +200,63 @@ export class home extends Component {
         data: {
           id:doorid
         }
-      })
+       })
         .then(res => {
           const door = res.data.doors;
-          console.log(door)
-
-          
+          console.log(door);
         })
         .catch (error => {
           console.log(error);
-
-          this.setState({ open: false })
+          this.setState({ open: false });
         })
 
     }
     handleCancel = () => this.setState({ open: false })
+    handleCancel1 = () => this.setState({ open1: false })
+
+    toggle(){
+      this.setState({ open15: false });
+    }
+
+    
+    handleChange(event) {
+      this.setState({[event.target.name]: event.target.value});
+    }
+
+    editDoor(id,DoorName,DoorLocation,DateTimeCreated, doorimage){
+
+      this.setState({ doorid: id });
+      this.setState({ DoorName: DoorName });
+      this.setState({ DoorLocation: DoorLocation });
+      this.setState({ DateTimeCreated: DateTimeCreated });
+      this.setState({ doorimage: doorimage });
+      this.setState({ open15: true });
+    }
+
+    
+    updateDoor(event){
+      event.preventDefault();
+      console.log(this.state.DoorLocation);
+      console.log(this.state.DoorName);
+      console.log(this.state.doorid);
+
+      
+      this.setState({ open15: false });
+
+    }
 
     deleteDoor(id) {
-      const doorid=id;
-      this.setState({ delete_id: doorid });
-      this.setState({ open: true })
+
+      const usertype = localStorage.getItem('usertype');
+      if(usertype==='Manager'){
+        const doorid=id;
+        this.setState({ delete_id: doorid });
+        this.setState({ open: true })
+      }
+      else {
+        this.setState({ open1: true })
+      }
+
     }
 
     render() {
@@ -199,14 +271,7 @@ export class home extends Component {
             </Statistic.Value>
             <Statistic.Label>Total Doors</Statistic.Label>
           </Statistic>
-          {/* <Statistic>
-            <Statistic.Value text>
-              Three
-              <br />
-              Thousand
-            </Statistic.Value>
-            <Statistic.Label>Signups</Statistic.Label>
-          </Statistic> */}
+   
           <Statistic>
             <Statistic.Value>
               <Icon name='building' />{this.state.totalSites}
@@ -216,8 +281,9 @@ export class home extends Component {
       
           <Statistic>
             <Statistic.Value>
-              <Icon name='building' /> 
+              <Icon name='building' />  
             </Statistic.Value>
+            <Statistic.Label>{this.state.mysite}</Statistic.Label>
             <Statistic.Label>Site with most doors</Statistic.Label>
           </Statistic>  
 
@@ -249,8 +315,7 @@ export class home extends Component {
      <Table.Row>
        <Table.HeaderCell />
        <Table.HeaderCell>Site Name</Table.HeaderCell>
-       <Table.HeaderCell>Door Name</Table.HeaderCell>
-       <Table.HeaderCell>Door Location</Table.HeaderCell>
+       <Table.HeaderCell>Door</Table.HeaderCell>
        <Table.HeaderCell>Date Time Created</Table.HeaderCell>
      </Table.Row>
    </Table.Header>
@@ -262,15 +327,24 @@ export class home extends Component {
        <Table.Cell collapsing>
        <Button.Group basic size='small'>
        <Button icon='eye'  onClick={() => this.viewDoor(door._id)}/>
+       <Button icon='edit'  onClick={() => this.editDoor(door._id, door.DoorName, door.DoorLocation , door.DateTimeCreated, door.Image)}/>
+
     {/* <Button icon='edit' /> */}
     <Button style={{color:'red'}} icon='delete' onClick={() => this.deleteDoor(door._id)} />
   </Button.Group>
        </Table.Cell>
-    <Table.Cell>{door.SiteID}</Table.Cell>
-     <Table.Cell>    
-        <Label as='a' color='blue'>{door.DoorName} </Label>
+       {door.Door_Site.map(Door_Site => 
+    <Table.Cell>{Door_Site.SiteName}</Table.Cell>
+    )}
+      <Table.Cell>
+          <Header as='h4' image>
+            <Image src={door.Image} rounded size='mini' />
+            <Header.Content>
+              {door.DoorName}
+             <Header.Subheader>{door.DoorLocation}</Header.Subheader>
+            </Header.Content>
+          </Header>
         </Table.Cell>
-     <Table.Cell>{door.DoorLocation}</Table.Cell>
      <Table.Cell>{door.DateTimeCreated}</Table.Cell>
      </Table.Row>
    )}
@@ -337,6 +411,62 @@ export class home extends Component {
   )}
   </Item.Group>
     </Card.Content>
+
+      <Modal  open={this.state.open1}>
+      <Header icon='lock' content='Un-Authorised' />
+      <Modal.Content>
+        <p>
+          You dont have permissions to delete the door
+        </p>
+      </Modal.Content>
+      <Modal.Actions>
+        <Button color='green' onClick={this.handleCancel1}>
+          OK
+        </Button>
+      </Modal.Actions>
+    </Modal>
+    <Modal open={this.state.open15}>
+    <Modal.Header>Edit Door</Modal.Header>
+    <Modal.Content image>
+      <Image wrapped size='medium' src={this.state.doorimage} />
+      <Modal.Description>
+        <Header>Door Details</Header>
+        <Form onSubmit={this.updateDoor}>
+      <Form.Field >
+        <label> Door Name </label>
+        <input type='text' placeholder='Door Name'
+             name="DoorName"   value={this.state.DoorName} onChange={this.handleChange}
+         />
+      </Form.Field>
+      <Form.Field >
+        <label> Door Location </label>
+        <input type='text' placeholder='Door Location'
+             name="DoorLocation"   value={this.state.DoorLocation} onChange={this.handleChange}
+         />
+      </Form.Field>
+      <Form.Field >
+        <label> Date Time Created </label>
+        <input type='text' placeholder='Door Location'
+             name="DoorLocation"   value={this.state.DateTimeCreated} onChange={this.handleChange}
+         disabled/>
+      </Form.Field>
+    
+  
+
+    <Button secondary type='submit'>Save Changes</Button>
+  </Form>
+      </Modal.Description>
+    </Modal.Content>
+
+    <Modal.Actions>
+      <Button color='red'>
+        <Icon name='remove'  onClick={() => this.setState({ open15: false }) }/> Cancel
+      </Button>
+
+    </Modal.Actions>
+
+  </Modal>
+
   </Card>
 
 

@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Header, Image, Table , Card , Dimmer, Loader, Button , Item, Confirm, Form, Input} from 'semantic-ui-react';
+import { Header, Image, Table , Card , Dimmer, Loader, Button , Item, Confirm, Form, Input , Modal} from 'semantic-ui-react';
 import axios from 'axios';
 export class sitePage extends Component {
 
@@ -11,7 +11,8 @@ export class sitePage extends Component {
         Loader: true,
         Loader1: true,
         open:false,
-        SiteName:''
+        SiteName:'',
+        open99: false
       }
     
       constructor(props) {
@@ -109,19 +110,34 @@ export class sitePage extends Component {
       handleChange(event) {
         this.setState({[event.target.name]: event.target.value});
       }
+      handleCancel1 = () => this.setState({ open99: false })
+
         viewDoor(id) {
           console.log(this.state.SiteName);
             this.props.history.push(`/mydoor?id=${id}`);
         }
 
         deleteDoor(id) {
+         
+
+        const usertype = localStorage.getItem('usertype');
+        if (usertype==='Manager'){
           const doorid=id;
           this.setState({ delete_id: doorid });
           this.setState({ open: true })
         }
+        else{
+          this.setState({ open99: true })
+
+        }
+        }
 
         updateSite(event){
           event.preventDefault();
+
+            const usertype = localStorage.getItem('usertype');
+         if (usertype==='Manager'){
+
           this.setState({Loader1: true});
 
 
@@ -157,6 +173,12 @@ export class sitePage extends Component {
             this.setState({Loader1: true});      
           })
 
+         }
+         else{
+          this.setState({open99: true}); 
+         }
+
+      
         }
 
         handleConfirm(){
@@ -193,6 +215,8 @@ export class sitePage extends Component {
     
         }
         handleCancel = () => this.setState({ open: false })
+
+
         
     render() {
         return (
@@ -282,6 +306,19 @@ export class sitePage extends Component {
     </Card.Content>
 
   </Card>
+  <Modal  open={this.state.open99}>
+      <Header icon='lock' content='Un-Authorised' />
+      <Modal.Content>
+        <p>
+          You dont have permissions to delete the door
+        </p>
+      </Modal.Content>
+      <Modal.Actions>
+        <Button color='green' onClick={this.handleCancel1}>
+          OK
+        </Button>
+      </Modal.Actions>
+    </Modal>
 
 
 </Fragment>

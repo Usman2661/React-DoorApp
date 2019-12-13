@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Icon, Image ,Button, Comment, Form, Header, Dimmer,Loader, Feed, Modal } from 'semantic-ui-react';
+import { Card, Icon, Image ,Button, Confirm, Form, Header, Dimmer,Loader, Feed, Modal } from 'semantic-ui-react';
 import axios from 'axios';
 
 export class doorPage extends Component {
@@ -9,6 +9,7 @@ export class doorPage extends Component {
     id:'',
     Loader:true,
     Loader1:false,
+    Loader2:false,
     door: [],
     DoorName:'',
     DoorLocation:'',
@@ -16,7 +17,9 @@ export class doorPage extends Component {
     DoorDocuments:[],
     open:false,
     document:null,
-    DocumentTitle:''
+    DocumentTitle:'',
+    open1: false,
+    open99: false
   }
 
   constructor(props) {
@@ -26,7 +29,9 @@ export class doorPage extends Component {
     this.handleDocumentChange = this.handleDocumentChange.bind(this);
     this.getDoorDocuments = this.getDoorDocuments.bind(this);  
     this.uploadDocument = this.uploadDocument.bind(this);
-
+    this.handleDelete = this.handleDelete.bind(this);
+    this.deleteDocument = this.deleteDocument.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
   } 
 
 
@@ -110,7 +115,6 @@ export class doorPage extends Component {
         handleChange(event) {
           this.setState({[event.target.name]: event.target.value});
 
-          console.log(this.state.DocumentTitle);
         }
   
         handleDocumentChange = (e) => {
@@ -119,6 +123,30 @@ export class doorPage extends Component {
           })
         };
    
+
+      toggle1 = () => {
+
+        // const usertype = localStorage.getItem('usertype');
+        // if (usertype==='Manager'){
+
+        // }
+        // else{
+
+        // }
+
+        const usertype = localStorage.getItem('usertype');
+        if (usertype==='Manager'){
+          this.setState({
+            open: !this.state.open
+          });
+        }
+        else{
+          this.setState({
+            open99: true
+          });
+        }
+      
+      }
 
       toggle = () => {
         this.setState({
@@ -163,6 +191,63 @@ export class doorPage extends Component {
         })
 
       }
+
+      handleCancel = () => this.setState({ open1: false })
+      handleCancel1 = () => this.setState({ open99: false })
+
+
+      handleDelete(){
+
+        this.setState({ open1: false })
+        this.setState({ Loader2: true })
+
+
+        const token = localStorage.getItem('token');
+        axios({
+          url: 'http://localhost:3000/api/delete',
+          method: 'delete',
+          headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+          },
+          data: {
+            id:this.state.doc_id,
+            docpath:this.state.docpath
+          }
+        })
+          .then(res => {
+            const door = res.data.message;
+            console.log(door);
+            this.getDoorDocuments();
+            this.setState({ Loader2: false })
+          })
+          .catch (error => {
+            console.log(error);
+            this.getDoorDocuments();
+            this.setState({ Loader2: false })
+          })
+      }
+
+      deleteDocument(id,document) {
+
+        const usertype = localStorage.getItem('usertype');
+
+        if(usertype==='Manager'){
+          var parts = document.split('.com/', 2);
+          var docpath  = parts[1];
+          
+          this.setState({  doc_id: id });
+          this.setState({  docpath: docpath });
+  
+          this.setState({  open1: true });
+        }
+        else{
+          this.setState({  open99: true });
+
+        }
+    
+
+      }
     render() {
         return (
 
@@ -199,10 +284,16 @@ export class doorPage extends Component {
            labelPosition='left'
            secondary
            size='medium'
-           onClick={this.toggle}
+           onClick={this.toggle1}
            >
            <Icon name='file' /> Add Document
          </Button>
+         {this.state.Loader2 ? 
+     <Dimmer active inverted>
+        <Loader>Loading</Loader>
+      </Dimmer>
+      :  null   
+      }
 
 <Feed size='large'>
 { this.state.DoorDocuments.map(mydoor =>   
@@ -220,13 +311,19 @@ export class doorPage extends Component {
           </Feed.Like>
         </Feed.Meta>
         <Feed.Meta>
-          <Feed.Like >
+          <Feed.Like  onClick={() => this.deleteDocument(mydoor._id,mydoor.Document)} >
             <Icon name='delete' />
           </Feed.Like>
         </Feed.Meta>
       </Feed.Content>
     </Feed.Event>
 )}
+<Confirm
+          open={this.state.open1}
+          header='Delete Document'
+          onCancel={this.handleCancel}
+          onConfirm={this.handleDelete}
+        />
   </Feed>
   <Modal size='medium' open={this.state.open} onClose={this.close}>
   {this.state.Loader1 ? 
@@ -269,6 +366,19 @@ export class doorPage extends Component {
         </Modal>
 <br/>
 <br/>
+<Modal  open={this.state.open99}>
+      <Header icon='lock' content='Un-Authorised' />
+      <Modal.Content>
+        <p>
+          You dont have permissions to delete the door
+        </p>
+      </Modal.Content>
+      <Modal.Actions>
+        <Button color='green' onClick={this.handleCancel1}>
+          OK
+        </Button>
+      </Modal.Actions>
+    </Modal>
     </Card.Content>
   </Card>
 
