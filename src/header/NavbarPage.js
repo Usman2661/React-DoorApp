@@ -85,6 +85,9 @@ logout = () => {
   localStorage.removeItem("userId");  //Logging user out
   localStorage.removeItem("token");  //Logging user out
   this.props.history.push('/');
+
+  this.setState({loggedIn: false});
+
 }
 
 myaccount = () => {

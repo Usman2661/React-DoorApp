@@ -124,7 +124,7 @@ export class register extends Component {
 
     </Modal.Actions>
   </Modal>
-
+  
 </Form>
 
         

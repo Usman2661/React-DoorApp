@@ -65,8 +65,11 @@ class login extends Component {
       localStorage.setItem('userId', userId);
       localStorage.setItem('token', token);
 
+      window.location.reload();
+      
       let path = 'home';
       this.props.history.push(path);
+
     })
     .catch(error => {
       console.log(error);

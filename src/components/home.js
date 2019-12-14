@@ -4,6 +4,7 @@ import { Button, Icon, Table , Statistic , Card
   Form} from 'semantic-ui-react';
 import '../css/home.css';
 import axios from 'axios';
+var QRCode = require('qrcode.react');
 
 export class home extends Component {
      state = { 
@@ -19,7 +20,8 @@ export class home extends Component {
        totalDoors:'',
        open15: false,
        UpdateLoader:false,
-       open136:false
+       open136:false,
+       qropen: false
     };
 
     constructor(props) {
@@ -37,13 +39,19 @@ export class home extends Component {
       this.handleChange = this.handleChange.bind(this);
       this.deleteSite = this.deleteSite.bind(this);
       this.deletedSite = this.deletedSite.bind(this);
-
+      this.viewQrCode = this.viewQrCode.bind(this);
+      this.signOut = this.signOut.bind(this);
     } 
 
     componentDidMount() {
       const loggedIn =  localStorage.getItem('loggedIn');
       if (loggedIn){
         const token =  localStorage.getItem('token');
+
+        setTimeout(()=> {
+          this.signOut();
+          console.log('User token expired');
+        }, 5000);
 
         this.getSites();
                 //Getting total doors
@@ -132,6 +140,12 @@ export class home extends Component {
       }
     }
 
+    signOut() {   
+      localStorage.clear();
+      window.location.reload();
+      this.props.history.push('/')
+    }
+
     getDoors(){
       
       this.setState({ Loader: true });
@@ -191,16 +205,21 @@ export class home extends Component {
     viewDoor(id) {
       this.props.history.push(`/mydoor?id=${id}`);
     }
+  
     viewSite(id) {
       this.props.history.push(`/mysite?id=${id}`);
+    }
+
+    viewQrCode(id){
+      this.setState({ qrid: id });
+
+      this.setState({ qropen: true })
     }
 
     handleConfirm(){
 
       this.setState({ open: false })
-
       const doorid = this.state.delete_id;
-
       const doors= this.state.doors;
       for (var i =0; i < doors.length; i++)
           if (doors[i]._id === doorid) {
@@ -233,6 +252,7 @@ export class home extends Component {
 
     }
     handleCancel = () => this.setState({ open: false })
+    handleCancelqr = () => this.setState({ qropen: false })
     handleCancel1 = () => this.setState({ open1: false })
     handleCancel136 = () => this.setState({ open136: false })
 
@@ -364,8 +384,9 @@ export class home extends Component {
 
     render() {
         return (
+          // style={{position:'absolute',marginLeft:'10px', width:'1300px'}}
           <Fragment>
-              <Card style={{position:'absolute',marginLeft:'10px', width:'1300px'}}>
+              <Card className='statHolder' >
           <Card.Content>
           <Statistic.Group widths='four'>
           <Statistic>
@@ -431,6 +452,8 @@ export class home extends Component {
        <Button.Group basic size='small'>
        <Button icon='eye'  onClick={() => this.viewDoor(door._id)}/>
        <Button icon='edit'  onClick={() => this.editDoor(door._id, door.DoorName, door.DoorLocation , door.DateTimeCreated, door.Image)}/>
+    
+       <Button icon='qrcode'  onClick={() => this.viewQrCode(door._id)}/>
 
     {/* <Button icon='edit' /> */}
     <Button style={{color:'red'}} icon='delete' onClick={() => this.deleteDoor(door._id)} />
@@ -516,6 +539,18 @@ export class home extends Component {
   )}
   </Item.Group>
     </Card.Content>
+
+    <Modal  open={this.state.qropen}>
+      <Header icon='qrcode' content='Qr Barcode' />
+      <Modal.Content>
+      <QRCode value={this.state.qrid} />
+      </Modal.Content>
+      <Modal.Actions>
+        <Button color='green' onClick={this.handleCancelqr}>
+          Close
+        </Button>
+      </Modal.Actions>
+    </Modal>
 
       <Modal  open={this.state.open1}>
       <Header icon='lock' content='Un-Authorised' />

@@ -32,6 +32,7 @@ export class doorPage extends Component {
     this.handleDelete = this.handleDelete.bind(this);
     this.deleteDocument = this.deleteDocument.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
+    this.viewDocument = this.viewDocument.bind(this);
   } 
 
 
@@ -237,9 +238,25 @@ export class doorPage extends Component {
           this.setState({  open99: true });
 
         }
-    
+      }
+
+      viewDocument(document) {
+
+        console.log(document);
+
+        const extension = document.substring(document.lastIndexOf(".") + 1);
+
+        console.log(extension);
+
+        this.props.history.push({
+          pathname: '/doc',
+          document: document,
+          filetype: extension
+        })
 
       }
+
+
     render() {
         return (
 
@@ -290,25 +307,25 @@ export class doorPage extends Component {
 { this.state.DoorDocuments.map(mydoor =>   
 
       <Feed.Event>
-        {mydoor.Document.includes('.pdf') ? 
+        {mydoor.Document.includes('.pdf') || mydoor.Document.includes('.PDF')  ? 
         <Feed.Label href={mydoor.Document} 
         image='http://localhost:3000/uploads/1575483118931-pdf-icon-vector-3.jpg' 
         />
       :  null   
       }
-        {mydoor.Document.includes('.docx')  ? 
+        {mydoor.Document.includes('.docx')  || mydoor.Document.includes('.DOCX')   ? 
         <Feed.Label href={mydoor.Document} 
         image='http://localhost:3000/uploads/word.png' 
         />
       :  null   
       }
-        {mydoor.Document.includes('.PNG') || mydoor.Document.includes('.jpg') || mydoor.Document.includes('.jpeg')  ? 
+        {mydoor.Document.includes('.png')  || mydoor.Document.includes('.PNG')  || mydoor.Document.includes('.jpg')  || mydoor.Document.includes('.JPG')   || mydoor.Document.includes('.JPEG')  || mydoor.Document.includes('.jpeg')  ? 
         <Feed.Label href={mydoor.Document} 
         image='http://localhost:3000/uploads/file.png' 
         />
       :  null   
       }
-        {mydoor.Document.includes('.csv')  || mydoor.Document.includes('.xlsx') || mydoor.Document.includes('.xls') ? 
+        {mydoor.Document.includes('.csv')  || mydoor.Document.includes('.CSV')   || mydoor.Document.includes('.xlsx')  || mydoor.Document.includes('.XLSX')  || mydoor.Document.includes('.XLS') || mydoor.Document.includes('.xls') ? 
         <Feed.Label href={mydoor.Document} 
         image='http://localhost:3000/uploads/excel.png' 
         />
@@ -326,6 +343,11 @@ export class doorPage extends Component {
         <Feed.Meta>
           <Feed.Like href={mydoor.Document}>
             <Icon name='download' />
+          </Feed.Like>
+        </Feed.Meta>
+        <Feed.Meta>
+          <Feed.Like onClick={() => this.viewDocument(mydoor.Document)} >
+            <Icon name='eye' />
           </Feed.Like>
         </Feed.Meta>
         <Feed.Meta>
