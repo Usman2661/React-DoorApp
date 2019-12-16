@@ -144,7 +144,7 @@ export class Site extends Component {
   accept="image/png, image/jpeg"  onChange={this.handleImageChange} required/>
 </Form.Field>
 
-<Button type='submit'>Create Site</Button>
+<Button secondary type='submit'>Create Site</Button>
 
 <Modal dimmer='blurring' size='mini' open={this.state.modal} onClose={this.toggle}>
     <Modal.Header>Message</Modal.Header>

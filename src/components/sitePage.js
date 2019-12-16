@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Header, Image, Table , Card , Dimmer, Loader, Button , Item, Confirm, Form, Input , Modal} from 'semantic-ui-react';
 import axios from 'axios';
+import '../css/sitePage.css';
 export class sitePage extends Component {
 
 
@@ -220,7 +221,7 @@ export class sitePage extends Component {
     render() {
         return (
        <Fragment>
- <Card style={{position:'absolute',marginLeft:'570px',width:'500px'}}>
+ <Card className='doorTable' >
     <Card.Content>
     <Confirm
           open={this.state.open}
@@ -272,7 +273,7 @@ export class sitePage extends Component {
   </Card.Content>
   </Card>
 
-  <Card style={{position:'absolute', marginLeft:'10px', width:'550px'}}>
+  <Card className='siteEdit' >
     <Card.Content>
     {this.state.Loader1 ? 
      <Dimmer active inverted>

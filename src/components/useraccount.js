@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Form ,Modal , Card,Image,Icon } from 'semantic-ui-react';
 import axios from 'axios';
+import '../css/userAccount.css'
 
 export class useraccount extends Component {
   
@@ -107,15 +108,9 @@ export class useraccount extends Component {
 
     }
 
-
-
-
     render() {
-
-
-
         return (
-        <Card style={{marginLeft:'400px'}}>
+        <Card className='myaccount' >
         <Image src={this.state.imageurl}  size='tiny' centered circular/>
         <Card.Content>
           <Card.Header>{this.state.name}</Card.Header>
@@ -148,7 +143,7 @@ export class useraccount extends Component {
          <input type="file" id="image" accept="image/png, image/jpeg"  onChange={this.handleImageChange} required/>
         </Form.Field>
         
-        <Button type='submit'>Save Changes</Button>
+        <Button secondary type='submit'>Save Changes</Button>
         
         <Modal dimmer='blurring' size='mini' open={this.state.modal} onClose={this.toggle}>
             <Modal.Header>Message</Modal.Header>
@@ -156,24 +151,15 @@ export class useraccount extends Component {
           <p>{this.state.message}</p>
             </Modal.Content>
             <Modal.Actions>
-              <Button negative onClick={this.toggle}>Close</Button>
-              {/* <Button positive onClick={this.loginPage}>Login Now</Button> */}
-        
+              <Button negative onClick={this.toggle}>Close</Button>        
             </Modal.Actions>
           </Modal>
         
         </Form>
         </Card.Content>
         <Card.Content extra>
-          {/* <a>
-            <Icon name='user' />
-            22 Friends
-          </a> */}
         </Card.Content>
       </Card>
-
-      
-
         )
     }
 }

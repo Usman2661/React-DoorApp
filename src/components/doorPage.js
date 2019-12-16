@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Card, Icon, Image ,Button, Confirm, Form, Header, Dimmer,Loader, Feed, Modal } from 'semantic-ui-react';
 import axios from 'axios';
+import '../css/doorPage.css';
 
 export class doorPage extends Component {
 
@@ -260,11 +261,9 @@ export class doorPage extends Component {
     render() {
         return (
 
-<Card style={{position:'absolute',width:'500px', marginLeft:'350px'}}>
+<Card className='documentCard'>
 
-    <Image src={this.state.DoorImage} wrapped ui={false} />
-    {/* { this.state.door.map(mydoor =>   */}
-
+    <Image size='medium' className='doorImage' src={this.state.DoorImage} wrapped  />
     <Card.Content>
     {this.state.Loader ? 
      <Dimmer active inverted>
@@ -390,17 +389,18 @@ export class doorPage extends Component {
   onChange={this.handleDocumentChange} required/>
 </Form.Field>
 
-<Button type='submit'>Add Document</Button>
+{/* <Button primary type='submit'>Add Document</Button> */}
 </Form>
 
           </Modal.Content>
           <Modal.Actions>
-            <Button negative onClick={this.toggle}>No</Button>
+            <Button negative icon='cancel' onClick={this.toggle}>Cancel</Button>
             <Button type='submit'
               positive
-              icon='checkmark'
+              icon='cloud upload'
               labelPosition='right'
               content='Add Document'
+              onClick={this.uploadDocument}
             />
           </Modal.Actions>
         </Modal>

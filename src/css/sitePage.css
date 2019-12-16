@@ -47,25 +47,18 @@ and (orientation : portrait) {
 /* 1366 by 768 Most Used Screen*/
 @media only screen
 and (min-width : 1301px) and (max-width:1380px) {
+.siteEdit{
+    position: absolute !important;
+    margin-left: 10px !important;
+    width: 550px !important;
+}
+    /* style={{position:'absolute',marginLeft:'570px',width:'500px'}} */
 
-    .statCard{
+    .doorTable{
         position: absolute !important;
-        width: 1330px !important;
-        margin-left:10px !important; 
+        margin-left: 570px !important;
+        width: 500px !important;
     }
-    .doorTableCard{
-        position: absolute !important;
-        width: 1020px !important;
-        margin-left: 320px !important;
-        margin-top: 150px !important;
-    }
-    /* style={{position:'absolute',marginLeft:'10px',marginTop:'150px'}} */
-    .siteCard{
-        position: absolute !important;
-        margin-left: 10px !important;
-        margin-top: 150px !important;
-    }
-   
 }
 /* 1920 by 1080 2nd Most Used Screen*/
 @media only screen
@@ -94,27 +87,22 @@ and (min-width : 1150px) and (max-width:1300px) {
 /* 1536 by 864 6th Most Used Screen*/
 @media only screen
 and (min-width : 1535px) and (max-width:1598px) {
-    .statCard{
-        position: absolute !important;
-        width: 1500px !important;
-        margin-left:10px !important; 
-    }
-    .doorTableCard{
-        position: absolute !important;
-        width: 1090px !important;
-        margin-left: 420px !important;
-        margin-top: 150px !important;
-    }
-    /* style={{position:'absolute',marginLeft:'10px',marginTop:'150px'}} */
-    .siteCard{
+
+    /* style={{position:'absolute', marginLeft:'10px', width:'550px'}} */
+
+    .siteEdit{
         position: absolute !important;
         margin-left: 10px !important;
-        width: 400px !important;
-        margin-top: 150px !important;
+        width: 600px !important;
     }
-    .siteImage{
-        size:small !important;
+
+
+    .doorTable{
+        position: absolute !important;
+        margin-left: 620px !important;
+        width: 500px !important;
     }
+    
 }
 /* 1024 by 768 7th Most Used Screen*/
 @media only screen

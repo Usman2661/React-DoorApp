@@ -3,6 +3,7 @@ import { Button, Icon, Table , Statistic , Card
    ,Header, Image , Item , Dimmer, Loader , Confirm , Modal,
   Form} from 'semantic-ui-react';
 import '../css/home.css';
+import ReactDOM from 'react-dom';
 import axios from 'axios';
 var QRCode = require('qrcode.react');
 
@@ -49,9 +50,8 @@ export class home extends Component {
         const token =  localStorage.getItem('token');
 
         setTimeout(()=> {
-          this.signOut();
-          console.log('User token expired');
-        }, 5000);
+          this.signOut();     
+        }, 3600000);
 
         this.getSites();
                 //Getting total doors
@@ -358,11 +358,13 @@ export class home extends Component {
           console.log(site);
           this.setState({ open136: false })
           this.getSites();
+          this.getDoors();
         })
         .catch (error => {
           console.log(error);
           this.setState({ open136: false });
           this.getSites();
+          this.getDoors();
         })
     }
 
@@ -373,8 +375,6 @@ export class home extends Component {
         const SiteID=id;
         this.setState({ SiteID: SiteID });
         this.setState({ open136: true })
-
-
       }
       else {
         this.setState({ open1: true })
@@ -384,9 +384,9 @@ export class home extends Component {
 
     render() {
         return (
-          // style={{position:'absolute',marginLeft:'10px', width:'1300px'}}
+          
           <Fragment>
-              <Card className='statHolder' >
+              <Card className='statCard'>
           <Card.Content>
           <Statistic.Group widths='four'>
           <Statistic>
@@ -420,9 +420,8 @@ export class home extends Component {
         </Statistic.Group>
           </Card.Content>
         </Card>
-        
-        
-        <Card style={{ position:'absolute',width:'900px', marginLeft:'350px',marginTop:'150px'}}>
+
+        <Card className='doorTableCard'  >
     <Card.Content>
       <Card.Header>Doors</Card.Header>
     </Card.Content>
@@ -433,8 +432,9 @@ export class home extends Component {
         <Loader>Loading</Loader>
       </Dimmer>
       :  null   
+
       }   
-   <Table color='red' key='red' id='doorTable' className='doorTable' name='doorTable'  compact celled definition>
+   <Table color='red' key='red' compact celled definition>
    <Table.Header>
      <Table.Row>
        <Table.HeaderCell />
@@ -452,8 +452,8 @@ export class home extends Component {
        <Button.Group basic size='small'>
        <Button icon='eye'  onClick={() => this.viewDoor(door._id)}/>
        <Button icon='edit'  onClick={() => this.editDoor(door._id, door.DoorName, door.DoorLocation , door.DateTimeCreated, door.Image)}/>
-    
        <Button icon='qrcode'  onClick={() => this.viewQrCode(door._id)}/>
+
 
     {/* <Button icon='edit' /> */}
     <Button style={{color:'red'}} icon='delete' onClick={() => this.deleteDoor(door._id)} />
@@ -475,12 +475,12 @@ export class home extends Component {
      </Table.Row>
    )}
    </Table.Body>
-
    <Table.Header fullWidth>
      <Table.Row>
        <Table.HeaderCell />
        <Table.HeaderCell colSpan='4'>
          <Button
+         secondary
            floated='right'
            icon
            labelPosition='left'
@@ -489,7 +489,7 @@ export class home extends Component {
 
            onClick={this.createDoor}
          >
-           <Icon name='file' /> Add Door
+           <Icon name='plus square' /> Add Door
          </Button>
        </Table.HeaderCell>
      </Table.Row>
@@ -502,8 +502,8 @@ export class home extends Component {
           header='Delete Door'
           onCancel={this.handleCancel}
           onConfirm={this.handleConfirm}
-        />
- <Card style={{position:'absolute',marginLeft:'10px',marginTop:'150px'}}>
+/>
+ <Card className='siteCard'>
     <Card.Content>
       <Card.Header>Sites</Card.Header>
     </Card.Content>
@@ -516,12 +516,12 @@ export class home extends Component {
       :  null   
       } 
 
-    <Item.Group  style={{width:'200px'}} divided>
+    <Item.Group   divided>
     {this.state.sites.map(site =>  
 
 // onClick={() => this.viewSite(site._id)}
     <Item >
-      <Item.Image size='tiny' src={site.Image} />
+      <Item.Image className='siteImage' size='tiny' src={site.Image} />
       <Item.Content>
         <Item.Header>{site.SiteName}</Item.Header>
         <Item.Description>
@@ -629,5 +629,8 @@ export class home extends Component {
         )
     }
 }
+
+
+// ReactDOM.render(<home />, document.getElementById('root'));
 
 export default home

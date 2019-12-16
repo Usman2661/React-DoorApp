@@ -164,12 +164,11 @@ export class Door extends Component {
   <input type="file"
   id="image"
   accept="image/png, image/jpeg"  onChange={this.handleImageChange} required/>
-  <img src={this.state.file} style={{ width:'200px', height:'150px'}}/>
+  {/* <img src={this.state.file} style={{ marginLeft:'-200px',width:'200px', height:'150px'}}/> */}
 
 </Form.Field>
 
-
-      <Button type='submit'>Create Door</Button>
+      <Button secondary type='submit'>Create Door</Button>
       
       <Modal dimmer='blurring' size='mini' open={this.state.modal} onClose={this.toggle}>
           <Modal.Header>Message</Modal.Header>

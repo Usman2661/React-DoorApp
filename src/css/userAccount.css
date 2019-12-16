@@ -48,22 +48,9 @@ and (orientation : portrait) {
 @media only screen
 and (min-width : 1301px) and (max-width:1380px) {
 
-    .statCard{
+    .myaccount{
         position: absolute !important;
-        width: 1330px !important;
-        margin-left:10px !important; 
-    }
-    .doorTableCard{
-        position: absolute !important;
-        width: 1020px !important;
-        margin-left: 320px !important;
-        margin-top: 150px !important;
-    }
-    /* style={{position:'absolute',marginLeft:'10px',marginTop:'150px'}} */
-    .siteCard{
-        position: absolute !important;
-        margin-left: 10px !important;
-        margin-top: 150px !important;
+        margin-left: 500px !important;
     }
    
 }
@@ -94,26 +81,9 @@ and (min-width : 1150px) and (max-width:1300px) {
 /* 1536 by 864 6th Most Used Screen*/
 @media only screen
 and (min-width : 1535px) and (max-width:1598px) {
-    .statCard{
+    .myaccount{
         position: absolute !important;
-        width: 1500px !important;
-        margin-left:10px !important; 
-    }
-    .doorTableCard{
-        position: absolute !important;
-        width: 1090px !important;
-        margin-left: 420px !important;
-        margin-top: 150px !important;
-    }
-    /* style={{position:'absolute',marginLeft:'10px',marginTop:'150px'}} */
-    .siteCard{
-        position: absolute !important;
-        margin-left: 10px !important;
-        width: 400px !important;
-        margin-top: 150px !important;
-    }
-    .siteImage{
-        size:small !important;
+        margin-left: 550px !important;
     }
 }
 /* 1024 by 768 7th Most Used Screen*/

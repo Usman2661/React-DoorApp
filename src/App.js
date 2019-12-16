@@ -1,5 +1,6 @@
 import React , { Component} from 'react';
 import './App.css';
+import './css/home.css';
 import Navbar from './header/NavbarPage';
 import Login from './components/login'
 import { BrowserRouter as Router , Route , Switch } from 'react-router-dom';
@@ -15,14 +16,12 @@ import MySite from './components/sitePage';
 import DocView from './components/documentView';
 
 class App extends Component {
-
   state = {
     loggedIn:false
   }
   componentDidMount(){
     const loggedIn =  localStorage.getItem('loggedIn');
     this.setState({loggedIn: loggedIn});
-
     console.log(loggedIn);
   }
  
