@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
-import { Button, Form ,Modal} from 'semantic-ui-react';
+import React, { Component, Fragment } from 'react';
+import { Button ,Modal , Card  , Input, Image, Form} from 'semantic-ui-react';
 import axios from 'axios';
+import '../css/login.css';
 
 class login extends Component {
 
@@ -92,20 +93,30 @@ class login extends Component {
     render() {
         return (
   
-      <Form onSubmit={this.login}>
-      <Form.Field >
-        <label> Email </label>
-        <input type='email' placeholder='Email'
-             name="email"   value={this.state.email} onChange={this.handleChange}
-         required error/>
-      </Form.Field>
-      <Form.Field>
-        <label>Password</label>
-        <input type='password' placeholder='Password'  name="password"
-             value={this.state.password} onChange={this.handleChange} required error/>
-      </Form.Field>
 
-      <Button type='submit'>Login</Button>
+          <Fragment>
+
+<div className='headerLogin'>
+
+<Image src='http://localhost:3000/uploads/icon.PNG' size='tiny'  verticalAlign='middle' />
+    <span style={{fontSize:'25px',fontWeight:'bold'}}> Login to your account</span>
+
+</div>
+          <Card className='loginCard'>
+          <Card.Content>
+     
+      <Form onSubmit={this.login}>
+
+        <Input className='emailInput' type='email' icon='mail' iconPosition='left' placeholder='Email'
+             name="email" value={this.state.email} onChange={this.handleChange}
+         required/>
+        <Input className='passwordInput' type='password' placeholder='Password'  name="password" iconPosition='left' icon='lock'
+             value={this.state.password} onChange={this.handleChange} required />
+
+             
+      <Button className='loginButton' secondary type='submit' onClick={this.login}>Login</Button>
+      </Form>
+
 
       <Modal dimmer='blurring' size='mini' open={this.state.open} onClose={this.toggle}>
           <Modal.Header>Message</Modal.Header>
@@ -118,9 +129,20 @@ class login extends Component {
           </Modal.Actions>
         </Modal>
 
-    </Form>
 
-    
+          </Card.Content>
+     
+        </Card>
+
+        <Card className='signuphere'>
+          <Card.Content>
+            <p> Sign up Here</p>
+          </Card.Content>
+        </Card>
+
+ 
+        </Fragment>
+
         )
     }
 }

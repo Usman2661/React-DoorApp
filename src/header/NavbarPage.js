@@ -163,7 +163,7 @@ render() {
 
      
 
-      <Menu.Menu position='right'>
+{ this.state.loggedIn ?    <Menu.Menu position='right'>
           <Dropdown item text={'Hi '+name}>
             <Dropdown.Menu>
               <Dropdown.Item onClick={this.myaccount}>My Account</Dropdown.Item>
@@ -171,6 +171,9 @@ render() {
             </Dropdown.Menu>
           </Dropdown>
           </Menu.Menu>
+       : null }
+
+     
 
       </Menu>
 
