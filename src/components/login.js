@@ -31,6 +31,8 @@ class login extends Component {
     };
     this.login = this.login.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.registerPage = this.registerPage.bind(this);
+
   }
 
   handleChange(event) {
@@ -88,7 +90,11 @@ class login extends Component {
       open: !this.state.open
     });
   }
+  
+  registerPage(){
+    this.props.history.push('/register');
 
+  }
 
     render() {
         return (
@@ -100,7 +106,6 @@ class login extends Component {
 
 <Image src='http://localhost:3000/uploads/icon.PNG' size='tiny'  verticalAlign='middle' />
     <span style={{fontSize:'25px',fontWeight:'bold'}}> Login to your account</span>
-
 </div>
           <Card className='loginCard'>
           <Card.Content>
@@ -136,7 +141,7 @@ class login extends Component {
 
         <Card className='signuphere'>
           <Card.Content>
-            <p> Sign up Here</p>
+            <p> Don't have an account?</p><a onClick={this.registerPage}> Sign Up</a>
           </Card.Content>
         </Card>
 

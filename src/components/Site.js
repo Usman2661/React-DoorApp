@@ -1,6 +1,8 @@
-import React, { Component } from 'react'
-import { Button, Form ,Modal} from 'semantic-ui-react';
+import React, { Component, Fragment } from 'react'
+import { Button, Form ,Modal , Input, Card , Image} from 'semantic-ui-react';
 import axios from 'axios';
+import '../css/site.css';
+
    
 export class Site extends Component {
 
@@ -106,45 +108,46 @@ export class Site extends Component {
         
     render() {
         return (
-      <Form onSubmit={this.createSite}>
-<Form.Field >
-  <label> Site Name </label>
-  <input type='text' placeholder='Site Name'
+          <Fragment>
+
+<div className='headerCreateSitePage'>
+
+<Image src='http://localhost:3000/uploads/icon.PNG' size='tiny'  verticalAlign='middle' />
+    <span style={{fontSize:'25px',fontWeight:'bold'}}> Create Site</span>
+</div>
+
+<Card className='newSiteCard'> 
+ <Card.Content>
+ <Form onSubmit={this.createSite}>
+  <Input className='siteName'  icon='building outline' iconPosition='left' type='text' placeholder='Site Name'
        name="SiteName"   value={this.state.SiteName} onChange={this.handleChange}
    required/>
-</Form.Field>
-<Form.Field >
-  <label> Site Address Line 1 </label>
-  <input type='text' placeholder='Site Address Line 1'
+
+  <Input className='siteAddressLine1'  icon='location arrow' iconPosition='left' type='text' placeholder='Site Address Line 1'
        name="SiteAddressLine1"   value={this.state.SiteAddressLine1} onChange={this.handleChange}
    required/>
-</Form.Field>
-<Form.Field >
-  <label> Site Address Line 2 </label>
-  <input type='text' placeholder='Site Address Line 2'
+
+  <Input className='siteAddressLine2'  icon='location arrow' iconPosition='left' type='text' placeholder='Site Address Line 2'
        name="SiteAddressLine2"   value={this.state.SiteAddressLine2} onChange={this.handleChange}/>
-</Form.Field>
-<Form.Field >
-  <label> Post Code </label>
-  <input type='text' placeholder='Post Code'
+
+  <Input className='sitePostCode'  icon='home' iconPosition='left' type='text' placeholder='Post Code'
        name="PostCode"   value={this.state.PostCode} onChange={this.handleChange}
    required/>
-</Form.Field>
-<Form.Field >
-  <label> City </label>
-  <input type='text' placeholder='City'
+
+  <Input className='siteCity'  icon='address book outline' iconPosition='left'  type='text' placeholder='City'
        name="City"   onChange={this.handleChange}
    required/>
-</Form.Field>
 
-<Form.Field >
-  <label> Site  Image </label>
-  <input type="file"
+  <Input className='newSiteImage' type="file"
   id="image"
   accept="image/png, image/jpeg"  onChange={this.handleImageChange} required/>
-</Form.Field>
 
-<Button secondary type='submit'>Create Site</Button>
+
+<Button className='createSiteButton' secondary type='submit'>Create Site</Button>
+
+</Form>
+ </Card.Content>
+</Card>
 
 <Modal dimmer='blurring' size='mini' open={this.state.modal} onClose={this.toggle}>
     <Modal.Header>Message</Modal.Header>
@@ -157,8 +160,9 @@ export class Site extends Component {
 
     </Modal.Actions>
   </Modal>
+  </Fragment>
 
-</Form>
+
         )
     }
 }

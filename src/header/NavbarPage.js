@@ -114,8 +114,6 @@ handleItemClick = (e, { name }) =>  {
   this.setState({ activeItem: name })
 }
 
-
-
 render() {
 
   const name = localStorage.getItem('name');

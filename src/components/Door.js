@@ -1,6 +1,7 @@
-import React, { Component } from 'react'
-import { Button, Form ,Modal , Select} from 'semantic-ui-react';
+import React, { Component, Fragment } from 'react'
+import { Button, Form ,Modal , Select, Input, Card, Image} from 'semantic-ui-react';
 import axios from 'axios';
+import '../css/door.css';
 
 
 export class Door extends Component {
@@ -141,34 +142,35 @@ export class Door extends Component {
 
     render() {
         return (
-      <Form onSubmit={this.createDoor}>
-      <Form.Field >
-        <label> Door Name </label>
-        <input type='text' placeholder='Door Name'
+          <Fragment>
+
+<div className='headerDoor'>
+
+<Image src='http://localhost:3000/uploads/icon.PNG' size='tiny'  verticalAlign='middle' />
+    <span style={{fontSize:'25px',fontWeight:'bold'}}> Create Door</span>
+</div>
+
+<Card className='doorCard'>
+  <Card.Content>
+  <Form onSubmit={this.createDoor}>
+        <Input className='doorName' icon='building' iconPosition='left' type='text' placeholder='Door Name'
              name="DoorName"   value={this.state.DoorName} onChange={this.handleChange}
          required/>
-      </Form.Field>
-      <Form.Field >
-        <label> Door Location </label>
-        <input type='text' placeholder='Door Location'
+        <Input className='doorLocation' icon='building outline' iconPosition='left' type='text' placeholder='Door Location'
              name="DoorLocation"   value={this.state.DoorLocation} onChange={this.handleChange}
          required/>
-      </Form.Field>
-      <Form.Field >
-        <label> Site </label>
-        <Select placeholder='Site' options={this.state.sites}  name='SiteID' onChange={this.getSite} required/>
-      </Form.Field>
+        <Select className='doorSite' placeholder='Site' options={this.state.sites}  name='SiteID' onChange={this.getSite} required/>
 
-      <Form.Field >
-  <label> Door Image </label>
-  <input type="file"
+  <Input className='myDoorFile' type="file"
   id="image"
   accept="image/png, image/jpeg"  onChange={this.handleImageChange} required/>
-  {/* <img src={this.state.file} style={{ marginLeft:'-200px',width:'200px', height:'150px'}}/> */}
 
-</Form.Field>
+      <Button className='createDoorButton' secondary type='submit'>Create Door</Button>
 
-      <Button secondary type='submit'>Create Door</Button>
+      </Form>
+  </Card.Content>
+</Card>
+    
       
       <Modal dimmer='blurring' size='mini' open={this.state.modal} onClose={this.toggle}>
           <Modal.Header>Message</Modal.Header>
@@ -180,7 +182,9 @@ export class Door extends Component {
       
           </Modal.Actions>
         </Modal>
-        </Form>
+
+        </Fragment>
+
         )
     }
 }

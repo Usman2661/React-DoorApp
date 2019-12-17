@@ -1,6 +1,8 @@
-import React, { Component } from 'react'
-import { Button, Form ,Modal ,Select} from 'semantic-ui-react';
+import React, { Component,Fragment } from 'react'
+import { Button, Form ,Modal ,Select, Image, Card, Input} from 'semantic-ui-react';
 import axios from 'axios';
+import '../css/register.css';
+
 
 const userTypeOptions = [
   {  value: 'Engineer', text: 'Engineer' },
@@ -31,6 +33,8 @@ export class register extends Component {
     };
     this.register = this.register.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.loginPage = this.loginPage.bind(this);
+
   }
   handleChange(event) {
     console.log(event.target.name);
@@ -78,40 +82,40 @@ export class register extends Component {
   }
 
   loginPage(){
-    this.props.history.push('/login');
+    this.props.history.push('/');
   }
 
     render() {
         return (
 
+<Fragment>
+<div className='headerRegister'>
+
+<Image src='http://localhost:3000/uploads/icon.PNG' size='tiny'  verticalAlign='middle' />
+    <span style={{fontSize:'25px',fontWeight:'bold'}}>Create new account</span>
+</div>
 
 
-<Form onSubmit={this.register}>
-<Form.Field >
-  <label> Name </label>
-  <input type='text' placeholder='Name'
+<Card className='registerCard'>
+  <Card.Content>
+  <Form onSubmit={this.register}>
+  <Input  className='nameInputRegister' type='text'  icon='user circle' iconPosition='left' placeholder='Name'
        name="name"   value={this.state.name} onChange={this.handleChange}
    required/>
-</Form.Field>
-<Form.Field >
-  <label> Email </label>
-  <input type='email' placeholder='Email'
+  <Input  className='emailInputRegister' type='email' icon='mail' iconPosition='left' placeholder='Email'
        name="email"   value={this.state.email} onChange={this.handleChange}
    required/>
-</Form.Field>
-<Form.Field>
-  <label>Password</label>
-  <input type='password' placeholder='Password'  name="password"
+  <Input  className='passwordInputRegister' type='password' icon='lock' iconPosition='left' placeholder='Password'  name="password"
        value={this.state.password} onChange={this.handleChange} required />
-</Form.Field>
-
-<Form.Field>
-
-<Select placeholder='User Type' options={userTypeOptions}  name='usertype' onChange={this.getUserType} required/>
-</Form.Field>
 
 
-<Button type='submit'>Register</Button>
+<Select   className='usertypeRegister' placeholder='User Type' options={userTypeOptions}  name='usertype' onChange={this.getUserType} required/>
+
+<Button className='registerButton'secondary type='submit'>Register</Button>
+
+</Form>
+  </Card.Content>
+</Card>
 
 <Modal dimmer='blurring' size='mini' open={this.state.open} onClose={this.toggle}>
     <Modal.Header>Message</Modal.Header>
@@ -125,9 +129,15 @@ export class register extends Component {
     </Modal.Actions>
   </Modal>
   
-</Form>
 
-        
+<Card className='loginhere'>
+          <Card.Content>
+            <p> Already have an account?</p><a onClick={this.loginPage}> Login Now </a>
+          </Card.Content>
+        </Card>
+
+</Fragment>
+    
         )
     }
 }

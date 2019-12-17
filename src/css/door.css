@@ -47,39 +47,37 @@ and (orientation : portrait) {
 /* 1366 by 768 Most Used Screen*/
 @media only screen
 and (min-width : 1301px) and (max-width:1380px) {
-.loginCard{
-    position: absolute !important;
-    width:400px !important;
-    margin-left: 450px !important;
-    margin-top: 150px !important;
-}
-.emailInput{
-    width: 350px !important;
-}
-.passwordInput{
-    margin-top:10px !important;
-    width: 350px !important;
-}
-.loginButton{
-    margin-top: 10px !important;
-    width: 350px !important;
-}
-.headerLogin{
-    position: absolute !important;
-    margin-left: 480px !important;
-    margin-top: 80px !important;
+    .headerDoor{
+        position: absolute !important;
+        margin-left:530px !important ;
+        margin-top: 80px !important;
+    }
+    .doorCard{
+        position: absolute !important;
+        margin-left:450px !important ;
+        width: 400px !important;
+        margin-top: 150px !important;
+    }
+    .doorName{
+        width: 350px !important;
+    }
+    .doorLocation{
+        margin-top: 10px !important;
+        width: 350px !important;
+    }
+    .myDoorFile  {
+        margin-top: 10px !important;
+        width: 350px !important;
+    }
+    .doorSite{
+        margin-top: 10px !important;
+        width: 350px !important;
+    }
+    .createDoorButton{
+        margin-top: 10px !important;
+        width: 350px !important;
+    }
 
-}
-.signuphere{
-    position: absolute !important;
-    margin-left: 450px !important;
-    margin-top: 330px !important;
-    width: 400px !important;
-}
-
-/* body{
-    background-color: lightgreen !important;
-} */
    
 }
 /* 1920 by 1080 2nd Most Used Screen*/
@@ -109,36 +107,36 @@ and (min-width : 1150px) and (max-width:1300px) {
 /* 1536 by 864 6th Most Used Screen*/
 @media only screen
 and (min-width : 1535px) and (max-width:1598px) {
-
-    .loginCard{
+    .headerDoor{
         position: absolute !important;
-        width:400px !important;
-        margin-left: 550px !important;
-        margin-top: 170px !important;
+        margin-left:580px !important ;
+        margin-top: 80px !important;
     }
-    .emailInput{
+    .doorCard{
+        position: absolute !important;
+        margin-left:500px !important ;
+        width: 400px !important;
+        margin-top: 150px !important;
+    }
+    .doorName{
         width: 350px !important;
     }
-    .passwordInput{
-        margin-top:10px !important;
-        width: 350px !important;
-    }
-    .loginButton{
+    .doorLocation{
         margin-top: 10px !important;
         width: 350px !important;
     }
-    .headerLogin{
-        position: absolute !important;
-        margin-left: 580px !important;
-        margin-top: 100px !important;
-    
+    .myDoorFile  {
+        margin-top: 10px !important;
+        width: 350px !important;
     }
-    .signuphere{
-        position: absolute !important;
-        margin-left: 550px !important;
-        margin-top: 350px !important;
-        width: 400px !important;
-    }   
+    .doorSite{
+        margin-top: 10px !important;
+        width: 350px !important;
+    }
+    .createDoorButton{
+        margin-top: 10px !important;
+        width: 350px !important;
+    }
 }
 /* 1024 by 768 7th Most Used Screen*/
 @media only screen
