@@ -24,7 +24,7 @@ export class Door extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.createDoor = this.createDoor.bind(this);
         this.handleImageChange = this.handleImageChange.bind(this);
-
+        this.signOut = this.signOut.bind(this);
       } 
 
 
@@ -91,6 +91,12 @@ export class Door extends Component {
       handleChange(event) {
         
         this.setState({[event.target.name]: event.target.value});
+      }
+
+      signOut() {   
+        localStorage.clear();
+        window.location.reload();
+        this.props.history.push('/')
       }
 
       //Submit the form

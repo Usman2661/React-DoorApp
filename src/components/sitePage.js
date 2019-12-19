@@ -13,13 +13,15 @@ export class sitePage extends Component {
         Loader1: true,
         open:false,
         SiteName:'',
-        open99: false
+        open99: false,
+        image: null
       }
     
       constructor(props) {
         super(props);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.getSiteDoors = this.getSiteDoors.bind(this);
+        this.handleImageChange = this.handleImageChange.bind(this);
         this.getSite = this.getSite.bind(this);
         this.viewDoor = this.viewDoor.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -27,6 +29,7 @@ export class sitePage extends Component {
         this.handleConfirm = this.handleConfirm.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
         this.deleteDoor = this.deleteDoor.bind(this);
+        this.signOut = this.signOut.bind(this);
       } 
     componentDidMount() {
 
@@ -88,6 +91,12 @@ export class sitePage extends Component {
               })
         }
 
+ 
+        signOut() {   
+          localStorage.clear();
+          window.location.reload();
+          this.props.history.push('/')
+        }
 
         getSite(){
           const token =  localStorage.getItem('token');
@@ -154,31 +163,60 @@ export class sitePage extends Component {
 
           this.setState({Loader1: true});
 
-
           const token = localStorage.getItem('token');
 
-          const options = {
-            headers: {
-              'Authorization': 'Bearer '+token,
-              'Content-Type': 'application/json'
-          }
-          };
+          // const options = {
+          //   headers: {
+          //     'Authorization': 'Bearer '+token,
+          //     'Content-Type': 'application/json'
+          // }
+          // };
 
-          axios.put('http://localhost:3000/api/updateSite', { 
-            id: this.state.id, 
-            SiteName: this.state.SiteName,
-            SiteAddressLine1: this.state.SiteAddressLine1, 
-            SiteAddressLine2: this.state.SiteAddressLine2,
-            PostCode: this.state.PostCode,
-            City: this.state.City
-           },
-           options
-           )
+          // axios.put('http://localhost:3000/api/updateSite', { 
+          //   id: this.state.id, 
+          //   SiteName: this.state.SiteName,
+          //   SiteAddressLine1: this.state.SiteAddressLine1, 
+          //   SiteAddressLine2: this.state.SiteAddressLine2,
+          //   PostCode: this.state.PostCode,
+          //   City: this.state.City
+          //  },
+          //  options
+          //  )
+          // .then(res => {
+          //   console.log(res.data);
+          //   this.getSite();
+          //   this.setState({Loader1: false});
+
+          // })
+          // .catch(error => {
+          //   console.log(error);
+          //   console.log(error.message);
+          //   this.setState({Loader1: true});      
+          // })
+
+          let form_data = new FormData();
+      if(this.state.image!=null){
+        form_data.append('file', this.state.image, this.state.image.name);
+      }
+      form_data.append('id', this.state.id);
+      form_data.append('SiteName', this.state.SiteName);
+      form_data.append('SiteAddressLine1', this.state.SiteAddressLine1);
+      form_data.append('SiteAddressLine2', this.state.SiteAddressLine2);
+      form_data.append('PostCode', this.state.PostCode);
+      form_data.append('City', this.state.City);
+
+
+      let url = 'http://localhost:3000/api/updateSite';
+      axios.put(url, form_data, {
+        headers: {
+          'content-type': 'multipart/form-data',
+          'Authorization': 'Bearer '+token
+        }
+      })
           .then(res => {
             console.log(res.data);
             this.getSite();
             this.setState({Loader1: false});
-
           })
           .catch(error => {
             console.log(error);
@@ -227,8 +265,13 @@ export class sitePage extends Component {
             })
     
         }
+        
         handleCancel = () => this.setState({ open: false })
-
+        handleImageChange = (e) => {
+          this.setState({
+            image: e.target.files[0]
+          })
+        };
 
         
     render() {
@@ -306,8 +349,7 @@ export class sitePage extends Component {
       <Input icon='users' value={this.state.SiteAddressLine2} iconPosition='left' onChange={this.handleChange} name='SiteAddressLine2' placeholder='Site Address Line 2' />
       <Input icon='users' value={this.state.PostCode} iconPosition='left' onChange={this.handleChange} name='PostCode' placeholder='Post Code' />
       <Input icon='users' value={this.state.City} iconPosition='left' onChange={this.handleChange} name='City' placeholder='City' />
-        {/* <label>Site Image</label>
-         <input type="file" id="image" accept="image/png, image/jpeg"  onChange={this.handleImageChange} /> */}
+      <Input type="file" id="image" accept="image/png, image/jpeg"  onChange={this.handleImageChange} />
 
     <Button secondary type='submit'>Save Changes</Button>
   </Form>

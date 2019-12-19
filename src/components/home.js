@@ -22,7 +22,8 @@ export class home extends Component {
        open15: false,
        UpdateLoader:false,
        open136:false,
-       qropen: false
+       qropen: false,
+       image: null
     };
 
     constructor(props) {
@@ -34,8 +35,10 @@ export class home extends Component {
       this.handleConfirm = this.handleConfirm.bind(this);
       this.editDoor = this.editDoor.bind(this);
       this.updateDoor = this.updateDoor.bind(this);
-      this.handleCancel2 = this.handleCancel2.bind(this);
       this.handleCancel136 = this.handleCancel136.bind(this);
+      this.handleCancelEditDoor = this.handleCancelEditDoor.bind(this);
+      this.handleImageChange = this.handleImageChange.bind(this);
+
 
       this.handleChange = this.handleChange.bind(this);
       this.deleteSite = this.deleteSite.bind(this);
@@ -280,11 +283,7 @@ export class home extends Component {
     handleCancelqr = () => this.setState({ qropen: false })
     handleCancel1 = () => this.setState({ open1: false })
     handleCancel136 = () => this.setState({ open136: false })
-
-    handleCancel2  (){
-      this.setState({ open15: false });
-    }
-
+    handleCancelEditDoor = () => this.setState({ open15: false })
     
     handleChange(event) {
       this.setState({[event.target.name]: event.target.value});
@@ -310,7 +309,12 @@ export class home extends Component {
      
     }
 
-    
+    handleImageChange = (e) => {
+      this.setState({
+        image: e.target.files[0]
+      })
+    };
+
     updateDoor(event){
       event.preventDefault();
       
@@ -318,36 +322,35 @@ export class home extends Component {
 
       const token = localStorage.getItem('token');
 
-      const options = {
-        headers: {
-          'Authorization': 'Bearer '+token,
-          'Content-Type': 'application/json'
+      let form_data = new FormData();
+      if(this.state.image!=null){
+        form_data.append('file', this.state.image, this.state.image.name);
       }
-      };
+      form_data.append('id', this.state.doorid);
+      form_data.append('DoorName', this.state.DoorName);
+      form_data.append('DoorLocation', this.state.DoorLocation);
 
-      axios.put('http://localhost:3000/api/updateDoor', { 
-        id: this.state.doorid, 
-        DoorName: this.state.DoorName,
-        DoorLocation: this.state.DoorLocation
-       },
-       options
-       )
-      .then(res => {
-        console.log(res.data);
-        this.setState({UpdateLoader: false});
-        this.setState({open15: false});
-        this.getDoors();
-
+      let url = 'http://localhost:3000/api/updateDoor';
+      axios.put(url, form_data, {
+        headers: {
+          'content-type': 'multipart/form-data',
+          'Authorization': 'Bearer '+token
+        }
       })
-      .catch(error => {
-        console.log(error);
-        console.log(error.message);
-        this.setState({UpdateLoader: false}); 
-        this.setState({open15: false});
-      })
+          .then(res => {
+            console.log(res.data);
+            this.setState({UpdateLoader: false});
+            this.setState({open15: false});
+            this.getDoors();
+          })
+          .catch(error => {
+            console.log(error);
+            console.log(error.message);
+            this.setState({UpdateLoader: false}); 
+            this.setState({open15: false});
+          })
 
-      
-
+    
     }
 
     deleteDoor(id) {
@@ -619,21 +622,24 @@ export class home extends Component {
       </Form.Field>
       <Form.Field >
         <label> Date Time Created </label>
-        <input type='text' placeholder='Door Location'
-             name="DoorLocation"   value={this.state.DateTimeCreated} onChange={this.handleChange}
+        <input type='text' 
+               value={this.state.DateTimeCreated} onChange={this.handleChange}
          disabled/>
       </Form.Field>
     
+      <Form.Field >
+        <label>Door Image</label>
+         <input type="file" id="image" accept="image/png, image/jpeg"  onChange={this.handleImageChange} />
+        </Form.Field>
   
-
     <Button secondary type='submit'>Save Changes</Button>
   </Form>
       </Modal.Description>
     </Modal.Content>
 
     <Modal.Actions>
-      <Button color='red'>
-        <Icon name='remove'  onClick={() => this.setState({ open15: false }) }/> Cancel
+      <Button color='red' onClick={this.handleCancelEditDoor}>
+        <Icon name='remove' /> Cancel
       </Button>
 
     </Modal.Actions>

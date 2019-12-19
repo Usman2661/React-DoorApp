@@ -27,7 +27,7 @@ export class useraccount extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleImageChange = this.handleImageChange.bind(this);
     this.updateUser = this.updateUser.bind(this);
-
+    this.signOut = this.signOut.bind(this);
   }
   
   componentDidMount() {
@@ -87,6 +87,12 @@ export class useraccount extends Component {
       this.setState({[event.target.name]: event.target.value});
     }
 
+    signOut() {   
+      localStorage.clear();
+      window.location.reload();
+      this.props.history.push('/')
+    }
+
     handleImageChange = (e) => {
       this.setState({
         image: e.target.files[0]
@@ -102,7 +108,9 @@ export class useraccount extends Component {
 
       console.log(this.state);
       let form_data = new FormData();
-      form_data.append('file', this.state.image, this.state.image.name);
+      if(this.state.image!=null){
+        form_data.append('file', this.state.image, this.state.image.name);
+      }
       form_data.append('name', this.state.name);
       form_data.append('email', this.state.email);
       form_data.append('id', id);
@@ -153,7 +161,7 @@ export class useraccount extends Component {
         </Form.Field>   
         <Form.Field >
         <label>Avatar Image</label>
-         <input type="file" id="image" accept="image/png, image/jpeg"  onChange={this.handleImageChange} required/>
+         <input type="file" id="image" accept="image/png, image/jpeg"  onChange={this.handleImageChange} />
         </Form.Field>
         
         <Button secondary type='submit'>Save Changes</Button>

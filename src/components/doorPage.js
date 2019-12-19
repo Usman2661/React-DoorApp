@@ -34,6 +34,7 @@ export class doorPage extends Component {
     this.deleteDocument = this.deleteDocument.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.viewDocument = this.viewDocument.bind(this);
+    this.signOut = this.signOut.bind(this);
   } 
 
 
@@ -131,6 +132,11 @@ export class doorPage extends Component {
         handleChange(event) {
           this.setState({[event.target.name]: event.target.value});
 
+        }
+        signOut() {   
+          localStorage.clear();
+          window.location.reload();
+          this.props.history.push('/')
         }
   
         handleDocumentChange = (e) => {

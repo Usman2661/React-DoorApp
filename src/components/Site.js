@@ -61,12 +61,18 @@ export class Site extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleImageChange = this.handleImageChange.bind(this);
         this.createSite = this.createSite.bind(this);
-
+        this.signOut = this.signOut.bind(this);
       }
       
 
       handleChange(event) {
         this.setState({[event.target.name]: event.target.value});
+      }
+
+      signOut() {   
+        localStorage.clear();
+        window.location.reload();
+        this.props.history.push('/')
       }
 
       handleImageChange = (e) => {
