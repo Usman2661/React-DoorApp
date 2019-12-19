@@ -49,10 +49,20 @@ export class home extends Component {
       if (loggedIn){
         const token =  localStorage.getItem('token');
 
-        setTimeout(()=> {
-          this.signOut();     
-        }, 3600000);
+              // Check for logout 
+          var currentDateTime = new Date();
+          var date = currentDateTime.getFullYear() + '-' + (currentDateTime.getMonth()+1) + '-' + currentDateTime.getDate() +' '+ currentDateTime.getHours()+':'+ currentDateTime.getMinutes()+':'+ currentDateTime.getSeconds();
+          const lasttime = localStorage.getItem('expiry');
 
+          var current = new Date(date);
+          var expiry = new Date(lasttime);
+
+          if ( current > expiry){
+            this.signOut();
+          }
+          /*******************************/
+
+  
         this.getSites();
                 //Getting total doors
                 axios({
@@ -140,6 +150,7 @@ export class home extends Component {
       }
     }
 
+  
     signOut() {   
       localStorage.clear();
       window.location.reload();
@@ -147,7 +158,21 @@ export class home extends Component {
     }
 
     getDoors(){
-      
+
+
+      // Check for logout 
+      var currentDateTime = new Date();
+      var date = currentDateTime.getFullYear() + '-' + (currentDateTime.getMonth()+1) + '-' + currentDateTime.getDate() +' '+ currentDateTime.getHours()+':'+ currentDateTime.getMinutes()+':'+ currentDateTime.getSeconds();
+      const lasttime = localStorage.getItem('expiry');
+
+      var current = new Date(date);
+      var expiry = new Date(lasttime);
+
+      if ( current > expiry){
+        this.signOut();
+      }
+      /*******************************/
+
       this.setState({ Loader: true });
 
       const token = localStorage.getItem('token');

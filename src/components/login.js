@@ -42,6 +42,11 @@ class login extends Component {
   login(event) {
     event.preventDefault();
 
+    var currentDateTime = new Date();
+    var date = currentDateTime.getFullYear() + '-' + (currentDateTime.getMonth()+1) + '-' + currentDateTime.getDate() +' '+ currentDateTime.getHours()+':'+ currentDateTime.getMinutes()+':'+ currentDateTime.getSeconds();
+    var d = new Date(date);
+    d.setHours(d.getHours() + 1);
+
     axios.post('http://localhost:3000/api/user/login', { 
       email: this.state.email,
       password: this.state.password
@@ -61,15 +66,18 @@ class login extends Component {
       this.setState({
         open: !this.state.open
       });
+ 
+
       localStorage.setItem('loggedIn', true);
       localStorage.setItem('email', email);
       localStorage.setItem('usertype', usertype);
       localStorage.setItem('name', name);
       localStorage.setItem('userId', userId);
       localStorage.setItem('token', token);
+      localStorage.setItem('expiry', d);
 
       window.location.reload();
-      
+
       let path = 'home';
       this.props.history.push(path);
 

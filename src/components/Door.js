@@ -35,10 +35,25 @@ export class Door extends Component {
         const usertype =  localStorage.getItem('usertype');
 
         if (loggedIn){
+          
             if(usertype!=='Manager'){
                 this.props.history.push('/permission');
             }
             else{   
+
+                // Check for logout 
+      var currentDateTime = new Date();
+      var date = currentDateTime.getFullYear() + '-' + (currentDateTime.getMonth()+1) + '-' + currentDateTime.getDate() +' '+ currentDateTime.getHours()+':'+ currentDateTime.getMinutes()+':'+ currentDateTime.getSeconds();
+      const lasttime = localStorage.getItem('expiry');
+
+      var current = new Date(date);
+      var expiry = new Date(lasttime);
+
+      if ( current > expiry){
+        this.signOut();
+      }
+      /*******************************/
+      
             const token =  localStorage.getItem('token');
             axios({
               url: 'http://localhost:3000/api/sites',

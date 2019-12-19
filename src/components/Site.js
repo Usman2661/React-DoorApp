@@ -22,11 +22,25 @@ export class Site extends Component {
         const usertype =  localStorage.getItem('usertype');
 
         if (loggedIn){
+            // Check for logout 
+      var currentDateTime = new Date();
+      var date = currentDateTime.getFullYear() + '-' + (currentDateTime.getMonth()+1) + '-' + currentDateTime.getDate() +' '+ currentDateTime.getHours()+':'+ currentDateTime.getMinutes()+':'+ currentDateTime.getSeconds();
+      const lasttime = localStorage.getItem('expiry');
+
+      var current = new Date(date);
+      var expiry = new Date(lasttime);
+
+      if ( current > expiry){
+        this.signOut();
+      }
+      /*******************************/
+      
             if(usertype!=='Manager'){
                 this.props.history.push('/permission');
             }
         }
         else {
+          
           this.props.history.push('/');
         }
       }
